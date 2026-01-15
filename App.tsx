@@ -11,6 +11,8 @@ import Testimonials from './components/Testimonials';
 import LeadCapturePopup from './components/LeadCapturePopup';
 import FAQ from './components/FAQ';
 import FAQPage from './components/FAQPage';
+import AffiliatePage from './components/AffiliatePage';
+import OrderQuoteForm from './components/OrderQuoteForm';
 import Footer from './components/Footer';
 import ServicePage from './components/ServicePage';
 import HowItWorksPage from './components/HowItWorksPage';
@@ -18,7 +20,7 @@ import PortfolioPage from './components/PortfolioPage';
 import { SERVICES_DATA } from './constants';
 import { MessageCircle, ArrowUpRight } from 'lucide-react';
 
-type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | string; // string is for service ID
+type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | string; // string is for service ID
 
 const App: React.FC = () => {
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -74,6 +76,10 @@ const App: React.FC = () => {
           <PortfolioPage onBack={() => handleNavigate('home')} />
         ) : activeView === 'faq' ? (
           <FAQPage onBack={() => handleNavigate('home')} />
+        ) : activeView === 'affiliate' ? (
+          <AffiliatePage onBack={() => handleNavigate('home')} />
+        ) : activeView === 'order-quote' ? (
+          <OrderQuoteForm onBack={() => handleNavigate('home')} />
         ) : (
           <>
             <Hero />

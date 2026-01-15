@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Zap } from 'lucide-react';
 import { SERVICES_DATA } from '../constants';
 
 interface HeaderProps {
@@ -102,6 +102,15 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
             </button>
 
             <button
+              onClick={() => onNavigate('affiliate')}
+              className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
+                currentView === 'affiliate' ? 'text-emerald-500' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
+              }`}
+            >
+              Affiliate
+            </button>
+
+            <button
               onClick={() => onNavigate('how-it-works')}
               className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
                 currentView === 'how-it-works' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
@@ -119,14 +128,24 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
               Support
             </button>
             
-            <a 
-              href="https://wa.me/27687240126"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-600/20"
-            >
-              Consult Now
-            </a>
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => onNavigate('order-quote')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-lg ${
+                  isScrolled ? 'bg-slate-100 text-slate-900' : 'bg-white/10 text-white backdrop-blur-md'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 text-indigo-500" /> Instant Quote
+              </button>
+              <a 
+                href="https://wa.me/27687240126"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-600/20"
+              >
+                Consult Now
+              </a>
+            </div>
           </nav>
 
           <button 
@@ -152,10 +171,24 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
           </button>
 
           <button 
+            onClick={() => { onNavigate('order-quote'); setMobileMenuOpen(false); }}
+            className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
+          >
+            <Zap className="w-5 h-5" /> Instant Quote Hub
+          </button>
+
+          <button 
             onClick={() => { onNavigate('portfolio'); setMobileMenuOpen(false); }}
             className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
           >
             Portfolio
+          </button>
+
+          <button 
+            onClick={() => { onNavigate('affiliate'); setMobileMenuOpen(false); }}
+            className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
+          >
+            Affiliate Program
           </button>
 
           <button 

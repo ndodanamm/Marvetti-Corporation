@@ -42,6 +42,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-4 text-sm font-medium">
               <li><a href="#portfolio" onClick={(e) => { e.preventDefault(); onNavigate('home'); setTimeout(() => document.getElementById('portfolio')?.scrollIntoView({behavior:'smooth'}), 100); }} className="hover:text-white transition-colors">Our Portfolio</a></li>
               <li><button onClick={() => onNavigate('how-it-works')} className="hover:text-white transition-colors">How It Works</button></li>
+              <li><button onClick={() => onNavigate('affiliate')} className="hover:text-white transition-colors">Affiliate Program</button></li>
               <li><button onClick={() => onNavigate('faq')} className="hover:text-white transition-colors">Support Hub</button></li>
               <li><a href="https://wa.me/27687240126" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Chat to Consultant</a></li>
             </ul>
