@@ -15,13 +15,14 @@ import {
 
 interface OrderQuoteFormProps {
   onBack: () => void;
+  initialServiceId?: string | null;
 }
 
 type Step = 'pillar' | 'package' | 'details' | 'summary';
 
-const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack }) => {
-  const [step, setStep] = useState<Step>('pillar');
-  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack, initialServiceId }) => {
+  const [step, setStep] = useState<Step>(initialServiceId ? 'package' : 'pillar');
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(initialServiceId || null);
   const [selectedPackageIdx, setSelectedPackageIdx] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -44,7 +45,10 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack }) => {
   };
 
   const handleBackStep = () => {
-    if (step === 'package') setStep('pillar');
+    if (step === 'package') {
+      if (initialServiceId) onBack();
+      else setStep('pillar');
+    }
     else if (step === 'details') setStep('package');
     else if (step === 'summary') setStep('details');
     else onBack();
@@ -66,7 +70,8 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack }) => {
     window.open(`https://wa.me/27687240126?text=${message}`, '_blank');
   };
 
-  const progress = step === 'pillar' ? 25 : step === 'package' ? 50 : step === 'details' ? 75 : 100;
+  const currentStepNum = step === 'pillar' ? 1 : step === 'package' ? 2 : step === 'details' ? 3 : 4;
+  const progress = currentStepNum * 25;
 
   return (
     <div className="min-h-screen bg-slate-50 pt-32 pb-40">
@@ -84,8 +89,10 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack }) => {
               <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase">Instant Quote Hub</h1>
             </div>
             <div className="text-right">
-              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest block">Step {progress / 25} of 4</span>
-              <span className="text-xs font-bold text-slate-400">{step === 'pillar' ? 'Solution Pillar' : step === 'package' ? 'Package Selection' : step === 'details' ? 'Contact Data' : 'Final Summary'}</span>
+              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest block">Step {currentStepNum} of 4</span>
+              <span className="text-xs font-bold text-slate-400">
+                {step === 'pillar' ? 'Solution Pillar' : step === 'package' ? 'Package Selection' : step === 'details' ? 'Contact Data' : 'Final Summary'}
+              </span>
             </div>
           </div>
           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -295,25 +302,6 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack }) => {
                )}
              </div>
           </div>
-        </div>
-
-        {/* Support Card */}
-        <div className="mt-12 p-8 rounded-[2.5rem] bg-indigo-600 text-white flex flex-col md:flex-row items-center justify-between gap-8">
-           <div className="flex items-center gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-                 <Zap className="w-6 h-6 text-indigo-200" />
-              </div>
-              <div>
-                 <h4 className="font-black uppercase tracking-tight text-lg">Need a Custom Architecture?</h4>
-                 <p className="text-indigo-100 text-sm font-medium">For projects exceeding standard pillars, our lead engineers are available for direct calls.</p>
-              </div>
-           </div>
-           <a 
-            href="https://wa.me/27687240126" 
-            className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-50 transition-colors shrink-0"
-           >
-             Book Engineering Call
-           </a>
         </div>
       </div>
     </div>

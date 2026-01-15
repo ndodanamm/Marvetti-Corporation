@@ -60,3 +60,20 @@ export interface RecommendationResult {
   suggestedSteps: string[];
   estimatedCost: string;
 }
+
+export interface DashboardProject {
+  id: string;
+  title: string;
+  status: 'In Progress' | 'Discovery' | 'Optimization' | 'Completed';
+  progress: number;
+  lastUpdate: string;
+  manager: string;
+  pillar: string;
+}
+
+export interface DashboardInvoice {
+  id: string;
+  date: string;
+  amount: string;
+  status: 'Paid' | 'Pending' | 'Overdue';
+}

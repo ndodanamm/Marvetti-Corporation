@@ -16,7 +16,7 @@ import {
   MousePointer2,
   RefreshCw
 } from 'lucide-react';
-import { ServiceItem, Project, FAQItem, StandaloneService } from './types';
+import { ServiceItem, Project, FAQItem, StandaloneService, DashboardProject, DashboardInvoice } from './types';
 
 export const SERVICES_DATA: ServiceItem[] = [
   {
@@ -255,6 +255,32 @@ export const PROJECTS: Project[] = [
       { label: 'ROI', value: '215%' }
     ]
   }
+];
+
+export const MOCK_DASHBOARD_PROJECTS: DashboardProject[] = [
+  {
+    id: 'd1',
+    title: 'E-Commerce Infrastructure Setup',
+    status: 'In Progress',
+    progress: 65,
+    lastUpdate: '2 hours ago',
+    manager: 'Sarah Thompson',
+    pillar: 'E-Commerce'
+  },
+  {
+    id: 'd2',
+    title: 'Corporate Brand Manual',
+    status: 'Discovery',
+    progress: 20,
+    lastUpdate: 'Yesterday',
+    manager: 'David Chen',
+    pillar: 'Branding'
+  }
+];
+
+export const MOCK_DASHBOARD_INVOICES: DashboardInvoice[] = [
+  { id: 'INV-4521', date: '20 Feb 2025', amount: 'R5,000', status: 'Paid' },
+  { id: 'INV-4533', date: '25 Feb 2025', amount: 'R2,500', status: 'Pending' }
 ];
 
 export interface FAQCategory {

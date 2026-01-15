@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown, Zap } from 'lucide-react';
+import { Menu, X, ChevronDown, Zap, LayoutDashboard } from 'lucide-react';
 import { SERVICES_DATA } from '../constants';
 
 interface HeaderProps {
@@ -102,15 +102,6 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
             </button>
 
             <button
-              onClick={() => onNavigate('affiliate')}
-              className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
-                currentView === 'affiliate' ? 'text-emerald-500' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
-              }`}
-            >
-              Affiliate
-            </button>
-
-            <button
               onClick={() => onNavigate('how-it-works')}
               className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
                 currentView === 'how-it-works' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
@@ -118,17 +109,16 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
             >
               How It Works
             </button>
-
-            <button
-              onClick={() => onNavigate('faq')}
-              className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
-                currentView === 'faq' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
-              }`}
-            >
-              Support
-            </button>
             
             <div className="flex items-center gap-4">
+              <button 
+                onClick={() => onNavigate('dashboard')}
+                className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 flex items-center gap-2 ${
+                   currentView === 'dashboard' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" /> Portal
+              </button>
               <button 
                 onClick={() => onNavigate('order-quote')}
                 className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-lg ${
@@ -171,6 +161,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
           </button>
 
           <button 
+            onClick={() => { onNavigate('dashboard'); setMobileMenuOpen(false); }}
+            className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
+          >
+            <LayoutDashboard className="w-5 h-5" /> Client Portal
+          </button>
+
+          <button 
             onClick={() => { onNavigate('order-quote'); setMobileMenuOpen(false); }}
             className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
           >
@@ -185,24 +182,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
           </button>
 
           <button 
-            onClick={() => { onNavigate('affiliate'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
-          >
-            Affiliate Program
-          </button>
-
-          <button 
             onClick={() => { onNavigate('how-it-works'); setMobileMenuOpen(false); }}
             className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
           >
             How It Works
-          </button>
-
-          <button 
-            onClick={() => { onNavigate('faq'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
-          >
-            Support Hub
           </button>
           
           <div className="flex flex-col gap-3">

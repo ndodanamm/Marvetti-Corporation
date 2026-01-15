@@ -13,6 +13,7 @@ import FAQ from './components/FAQ';
 import FAQPage from './components/FAQPage';
 import AffiliatePage from './components/AffiliatePage';
 import OrderQuoteForm from './components/OrderQuoteForm';
+import ClientDashboard from './components/ClientDashboard';
 import Footer from './components/Footer';
 import ServicePage from './components/ServicePage';
 import HowItWorksPage from './components/HowItWorksPage';
@@ -20,20 +21,27 @@ import PortfolioPage from './components/PortfolioPage';
 import { SERVICES_DATA } from './constants';
 import { MessageCircle, ArrowUpRight } from 'lucide-react';
 
-type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | string; // string is for service ID
+type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | 'dashboard' | string;
 
 const App: React.FC = () => {
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [activeView, setActiveView] = useState<ViewState>('home');
+  const [preSelectedServiceId, setPreSelectedServiceId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate initial asset loading for professional feel
     const timer = setTimeout(() => setIsAppLoading(false), 2200);
     return () => clearTimeout(timer);
   }, []);
 
   const handleNavigate = (view: ViewState) => {
     setActiveView(view);
+    setPreSelectedServiceId(null); 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleOrderService = (serviceId: string) => {
+    setPreSelectedServiceId(serviceId);
+    setActiveView('order-quote');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -69,7 +77,11 @@ const App: React.FC = () => {
       
       <main className="flex-grow">
         {activeService ? (
-          <ServicePage service={activeService} onBack={() => handleNavigate('home')} />
+          <ServicePage 
+            service={activeService} 
+            onBack={() => handleNavigate('home')} 
+            onOrder={() => handleOrderService(activeService.id)}
+          />
         ) : activeView === 'how-it-works' ? (
           <HowItWorksPage onBack={() => handleNavigate('home')} />
         ) : activeView === 'portfolio' ? (
@@ -78,13 +90,17 @@ const App: React.FC = () => {
           <FAQPage onBack={() => handleNavigate('home')} />
         ) : activeView === 'affiliate' ? (
           <AffiliatePage onBack={() => handleNavigate('home')} />
+        ) : activeView === 'dashboard' ? (
+          <ClientDashboard onBack={() => handleNavigate('home')} />
         ) : activeView === 'order-quote' ? (
-          <OrderQuoteForm onBack={() => handleNavigate('home')} />
+          <OrderQuoteForm 
+            onBack={() => handleNavigate('home')} 
+            initialServiceId={preSelectedServiceId}
+          />
         ) : (
           <>
             <Hero />
             
-            {/* Trust/Snap-On Bar */}
             <section className="bg-slate-950 py-16 border-y border-white/5 relative overflow-hidden">
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_50%,#4f46e5,transparent)]"></div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -102,7 +118,7 @@ const App: React.FC = () => {
 
             <ServiceTiles onSelectService={(id) => handleNavigate(id)} />
 
-            <StandaloneUpsells />
+            <StandaloneUpsells onOrder={handleOrderService} />
 
             <Portfolio onViewAll={() => handleNavigate('portfolio')} />
 
@@ -112,7 +128,6 @@ const App: React.FC = () => {
 
             <FAQ onViewAll={() => handleNavigate('faq')} />
 
-            {/* Final Branding CTA Section */}
             <section id="contact" className="py-40 bg-slate-950 relative overflow-hidden">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.1),transparent_70%)]"></div>
               
@@ -146,10 +161,8 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Lead Capture Popup (Appears after 3 min for first-time visitors) */}
       <LeadCapturePopup />
 
-      {/* Floating Interactive CTA */}
       <div className="fixed bottom-10 right-10 z-[90] flex flex-col items-end gap-4 pointer-events-none">
          <a 
           href="https://wa.me/27687240126"
@@ -165,7 +178,6 @@ const App: React.FC = () => {
         </a>
       </div>
       
-      {/* Policy Footer & Main Footer Component */}
       <section className="bg-slate-950 pt-20 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4">
           <div id="policies" className="font-inter pb-10 text-[9px] font-black leading-relaxed opacity-20 text-center uppercase tracking-[0.3em] max-w-4xl mx-auto text-white">

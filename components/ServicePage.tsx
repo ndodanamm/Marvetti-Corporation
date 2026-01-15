@@ -1,24 +1,22 @@
 
 import React, { useEffect } from 'react';
 import { ServiceItem } from '../types';
-import { Check, ArrowRight, MessageCircle, ArrowLeft, Clock, Sparkles } from 'lucide-react';
+import { Check, ArrowRight, MessageCircle, ArrowLeft, Clock, Sparkles, Zap } from 'lucide-react';
 import { STANDALONE_SERVICES, PROJECTS } from '../constants';
 import ServicePortfolio from './ServicePortfolio';
 
 interface ServicePageProps {
   service: ServiceItem;
   onBack: () => void;
+  onOrder: () => void;
 }
 
-const ServicePage: React.FC<ServicePageProps> = ({ service, onBack }) => {
+const ServicePage: React.FC<ServicePageProps> = ({ service, onBack, onOrder }) => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [service]);
 
-  // Select 3 random standalone services for upselling
   const upsells = [...STANDALONE_SERVICES].sort(() => 0.5 - Math.random()).slice(0, 3);
-  
-  // Find project specific to this service
   const serviceProject = PROJECTS.find(p => p.serviceId === service.id);
 
   return (
@@ -52,12 +50,11 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack }) => {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-20">
-            {/* Main Info */}
             <div className="lg:col-span-2 space-y-20">
               <div>
                 <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.4em] mb-8">Service Overview</h2>
                 <div className="prose prose-slate prose-xl font-medium text-slate-600 max-w-none leading-relaxed">
-                  {service.longDescription} Establishing a cohesive digital identity that resonates with your target audience across all touchpoints. Our Marvetti Framework ensures that every solution is optimized for the digital-first economy.
+                  Establishing a cohesive digital identity that resonates with your target audience across all touchpoints. Our Marvetti Framework ensures that every solution is optimized for the digital-first economy.
                 </div>
               </div>
 
@@ -92,11 +89,17 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack }) => {
                       <span key={tool} className="px-4 py-2 bg-white/5 border border-white/10 text-white text-[10px] font-black rounded-xl uppercase tracking-widest">{tool}</span>
                    ))}
                 </div>
+                <button 
+                  onClick={onOrder}
+                  className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl flex items-center justify-center gap-3 font-black uppercase tracking-widest text-xs shadow-xl shadow-indigo-900/20 transition-all mb-4"
+                >
+                  <Zap className="w-4 h-4" /> Configure Order
+                </button>
                 <a 
                   href="https://wa.me/27687240126"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl flex items-center justify-center gap-3 font-black uppercase tracking-widest text-xs shadow-xl shadow-emerald-900/20 transition-all"
+                  className="w-full py-5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-2xl flex items-center justify-center gap-3 font-black uppercase tracking-widest text-xs transition-all"
                 >
                   <MessageCircle className="w-4 h-4" /> Start Consultation
                 </a>
@@ -142,9 +145,12 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack }) => {
                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">{pkg.name}</span>
                    <div className="font-inter text-5xl font-black text-slate-950 mb-8 tracking-tighter">{pkg.price}</div>
                    <p className="text-sm text-slate-500 leading-relaxed mb-12 flex-grow font-medium">{pkg.description}</p>
-                   <a href="https://wa.me/27687240126" target="_blank" rel="noopener noreferrer" className="w-full py-6 bg-slate-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 group/btn">
-                      Get Started Today <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-2 transition-transform" />
-                   </a>
+                   <button 
+                      onClick={onOrder}
+                      className="w-full py-6 bg-slate-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 group/btn"
+                   >
+                      Order Package <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-2 transition-transform" />
+                   </button>
                 </div>
              ))}
           </div>
@@ -181,7 +187,12 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack }) => {
                     <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-400">
                        <Clock className="w-3 h-3" /> {upsell.deliveryTime}
                     </div>
-                    <a href="https://wa.me/27687240126" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700">Add to Plan +</a>
+                    <button 
+                      onClick={() => onOrder()} 
+                      className="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700"
+                    >
+                      Add to Plan +
+                    </button>
                  </div>
               </div>
             ))}

@@ -3,7 +3,11 @@ import React from 'react';
 import { STANDALONE_SERVICES } from '../constants';
 import { Clock, ArrowUpRight, Sparkles } from 'lucide-react';
 
-const StandaloneUpsells: React.FC = () => {
+interface StandaloneUpsellsProps {
+  onOrder: (serviceId: string) => void;
+}
+
+const StandaloneUpsells: React.FC<StandaloneUpsellsProps> = ({ onOrder }) => {
   return (
     <section className="py-32 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,12 +58,12 @@ const StandaloneUpsells: React.FC = () => {
                   <Clock className="w-3.5 h-3.5" />
                   <span className="text-[10px] font-black uppercase tracking-widest">{item.deliveryTime}</span>
                 </div>
-                <a 
-                  href="https://wa.me/#"
+                <button 
+                  onClick={() => onOrder('3')} // Default to branding pillar or map specific ID if needed
                   className="p-3 rounded-xl bg-white border border-slate-200 text-slate-900 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-sm"
                 >
                   <ArrowUpRight className="w-4 h-4" />
-                </a>
+                </button>
               </div>
             </div>
           ))}

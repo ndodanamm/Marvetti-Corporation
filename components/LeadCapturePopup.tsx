@@ -12,8 +12,8 @@ const LeadCapturePopup: React.FC = () => {
   });
 
   useEffect(() => {
-    // Check if the user has already interacted with the lead capture
-    const hasInteracted = localStorage.getItem('marvetti_lead_captured');
+    // Check if the user has already interacted with the lead capture in this session
+    const hasInteracted = sessionStorage.getItem('marvetti_lead_captured');
     
     if (!hasInteracted) {
       // Set a 3-minute timer (180,000 milliseconds)
@@ -27,8 +27,8 @@ const LeadCapturePopup: React.FC = () => {
 
   const handleClose = () => {
     setIsVisible(false);
-    // Prevent showing it again in this session or future sessions for a while
-    localStorage.setItem('marvetti_lead_captured', 'dismissed');
+    // Prevent showing it again in this browser session
+    sessionStorage.setItem('marvetti_lead_captured', 'dismissed');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,7 +36,7 @@ const LeadCapturePopup: React.FC = () => {
     // Simulate API call
     console.log('Lead Captured:', formData);
     setIsSubmitted(true);
-    localStorage.setItem('marvetti_lead_captured', 'submitted');
+    sessionStorage.setItem('marvetti_lead_captured', 'submitted');
     
     // Close after a brief success message
     setTimeout(() => {
