@@ -4,6 +4,7 @@ import { ServiceItem } from '../types';
 import { Check, ArrowRight, MessageCircle, ArrowLeft, Clock, Sparkles, Zap } from 'lucide-react';
 import { STANDALONE_SERVICES, PROJECTS } from '../constants';
 import ServicePortfolio from './ServicePortfolio';
+import ProjectCarousel from './ProjectCarousel';
 
 interface ServicePageProps {
   service: ServiceItem;
@@ -124,8 +125,13 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack, onOrder }) =
         </div>
       </section>
 
-      {/* Portfolio Showcase Pillar */}
-      {serviceProject && (
+      {/* Conditional Portfolio Carousel for Business Admin */}
+      {service.id === '1' && (
+        <ProjectCarousel />
+      )}
+
+      {/* Standard Portfolio Showcase Pillar */}
+      {serviceProject && service.id !== '1' && (
         <ServicePortfolio project={serviceProject} />
       )}
 

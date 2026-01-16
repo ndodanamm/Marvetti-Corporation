@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown, Zap, LayoutDashboard } from 'lucide-react';
+import { Menu, X, ChevronDown, Zap, LayoutDashboard, Sparkles } from 'lucide-react';
 import { SERVICES_DATA } from '../constants';
 
 interface HeaderProps {
@@ -23,7 +23,6 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle outside click for dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -52,7 +51,6 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
           </div>
 
           <nav className="hidden md:flex items-center gap-10">
-            {/* Services with Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onMouseEnter={() => setServicesOpen(true)}
@@ -64,7 +62,6 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
                 Services <ChevronDown className={`w-3 h-3 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Dropdown Menu */}
               {servicesOpen && (
                 <div 
                   onMouseLeave={() => setServicesOpen(false)}
@@ -92,6 +89,15 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
                 </div>
               )}
             </div>
+
+            <button
+              onClick={() => onNavigate('ai-studio')}
+              className={`flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
+                currentView === 'ai-studio' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" /> AI Studio
+            </button>
 
             <button
               onClick={() => onNavigate('portfolio')}
@@ -159,6 +165,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
             className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
           >
             Home
+          </button>
+
+          <button 
+            onClick={() => { onNavigate('ai-studio'); setMobileMenuOpen(false); }}
+            className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
+          >
+            <Sparkles className="w-5 h-5" /> AI Studio
           </button>
 
           <button 

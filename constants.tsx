@@ -13,8 +13,7 @@ import {
   Search,
   ShieldCheck,
   FileText,
-  MousePointer2,
-  RefreshCw
+  MousePointer2
 } from 'lucide-react';
 import { ServiceItem, Project, FAQItem, StandaloneService, DashboardProject, DashboardInvoice, LeadRecord } from './types';
 
@@ -23,7 +22,7 @@ export const SERVICES_DATA: ServiceItem[] = [
     id: '8',
     category: 'cx',
     title: 'Customer Service & Client Relations',
-    shortDescription: 'Call centre services (inbound & outbound), ticketing & bots.',
+    shortDescription: 'Call centre services (inbound & outbound), Customer experience optimization.',
     longDescription: 'Strategic customer engagement solutions including multi-channel call centre services. We handle inbound queries and outbound relations to scale your client satisfaction and retention.',
     tools: ['Zendesk', 'Cloud PBX', 'HubSpot', 'Custom Bots'],
     startingPrice: 'R3,000',
@@ -206,226 +205,172 @@ export const PROJECTS: Project[] = [
     serviceId: '4',
     title: 'Global Store Automation',
     client: 'Urban Bloom Boutique',
-    description: 'Automated 2,000+ SKU inventory and payment routing across 3 regions.',
-    fullChallenge: 'Urban Bloom struggled with manual inventory updates and failed cross-border transactions.',
-    fullSolution: 'We deployed a Shopify backend with headless CMS and PayFast integration.',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200',
-    templateImage: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=600',
-    marketingImage: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=600',
+    description: 'Rebuilding a cross-border e-commerce engine with real-time inventory sync.',
+    fullChallenge: 'The client struggled with manual inventory updates across three different regions, leading to over-selling and customer dissatisfaction.',
+    fullSolution: 'We implemented a unified Shopify backend integrated with custom ERP middleware and automated currency conversion nodes.',
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800',
+    templateImage: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
+    marketingImage: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=800',
     tag: 'E-Commerce',
     stats: [
-      { label: 'Growth', value: '+420%' },
-      { label: 'Load Time', value: '0.8s' },
-      { label: 'Conversion', value: '5.2%' }
+      { label: 'Sales Increase', value: '+140%' },
+      { label: 'Inventory Error', value: '-98%' },
+      { label: 'Regions', value: '3' }
     ]
   },
   {
     id: 'p2',
     serviceId: '3',
-    title: 'Brand Identity Evolution',
-    client: 'AFREECO',
-    description: 'Comprehensive design system including corporate profiles, stationery, and digital identity.',
-    fullChallenge: 'AFREECO required a unified, premium visual language to consolidate their market presence and international appeal.',
-    fullSolution: 'Applying the "Design as Intelligence" philosophy, we crafted a high-impact identity package, corporate profiles, and digital templates.',
-    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200',
-    templateImage: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=600',
-    marketingImage: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=600',
+    title: 'Identity Refresh 2025',
+    client: 'Starlight Foundations',
+    description: 'A complete branding overhaul for a leading social impact organization.',
+    fullChallenge: 'Starlight needed a modern, digital-first identity that appealed to younger donors without losing its corporate credibility.',
+    fullSolution: 'Developed a high-fidelity design system, custom typography, and a rapid-deployment React-based landing page.',
+    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800',
+    templateImage: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800',
+    marketingImage: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800',
     tag: 'Branding',
     stats: [
-      { label: 'Design Score', value: 'A+' },
-      { label: 'Asset Unity', value: '100%' },
-      { label: 'Market Recall', value: '92%' }
+      { label: 'Engagement', value: '+65%' },
+      { label: 'Brand Reach', value: '2M+' },
+      { label: 'Consistency', value: '100%' }
     ]
   },
   {
     id: 'p3',
-    serviceId: '6',
-    title: 'Finance Analytics Engine',
-    client: 'Nexus Finance',
-    description: 'Predictive data modeling and custom visualization for asset managers.',
-    fullChallenge: 'Data silos prevented the investment team from seeing real-time risk exposure.',
-    fullSolution: 'Engineered a PowerBI cloud dashboard with Python-based predictive modeling.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200',
-    templateImage: 'https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&q=80&w=600',
-    marketingImage: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1200',
-    tag: 'AI & Data',
+    serviceId: '2',
+    title: 'Infrastructure Scaling',
+    client: 'Apex Logistics',
+    description: 'Moving 500TB of operational data to a hybrid-cloud environment.',
+    fullChallenge: 'On-premise servers were failing under the load of holiday peak season logistics tracking.',
+    fullSolution: 'Migration to AWS with serverless Lambda triggers for real-time fleet telemetry processing.',
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800',
+    templateImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
+    marketingImage: 'https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&q=80&w=800',
+    tag: 'Cloud',
     stats: [
-      { label: 'Accuracy', value: '99.2%' },
-      { label: 'Time Saved', value: '40h/mo' },
-      { label: 'ROI', value: '215%' }
+      { label: 'Uptime', value: '99.99%' },
+      { label: 'Latency', value: '-450ms' },
+      { label: 'Security', value: 'Lvl 4' }
     ]
+  },
+  {
+    id: 'p4',
+    serviceId: '1',
+    title: 'Document Management System Overhaul',
+    client: 'Nexus Logistics',
+    description: 'Digitalization of 15 years of physical archives with AI-powered indexing.',
+    fullChallenge: 'Nexus Logistics struggled with a massive physical document backlog, hindering searchability and operational speed.',
+    fullSolution: 'We deployed a high-speed OCR pipeline and a custom-indexed Notion environment for immediate data retrieval.',
+    image: 'https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&q=80&w=1200',
+    templateImage: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=600',
+    marketingImage: 'https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=600',
+    tag: 'Business Admin',
+    stats: [
+      { label: 'Time Saved', value: '30h/mo' },
+      { label: 'Accuracy', value: '99.8%' },
+      { label: 'Efficiency', value: '+25%' }
+    ]
+  }
+];
+
+export const FAQS: FAQItem[] = [
+  {
+    question: "What is the Marvetti Corp framework?",
+    answer: "The Marvetti Framework is a set of proprietary digital-first operational procedures designed to eliminate inefficiency in business workflows through automation and specialized remote support."
+  },
+  {
+    question: "How does the pricing work?",
+    answer: "We offer transparent, once-off setup fees for most modules, with optional monthly retainers for ongoing optimization and high-touch support."
+  }
+];
+
+export const FAQ_CATEGORIES = [
+  {
+    title: 'General Inquiries',
+    items: FAQS
+  },
+  {
+    title: 'Technical Support',
+    items: [
+      {
+        question: "Is my data secure?",
+        answer: "Yes. All projects are built with security-first architecture and are fully compliant with South African POPIA and global GDPR regulations."
+      }
+    ]
+  }
+];
+
+export const TESTIMONIALS = [
+  {
+    id: 1,
+    quote: "Marvetti Corp didn't just build us a website; they built us a digital identity that actually generates revenue.",
+    client: "Sarah Jenkins",
+    industry: "Tech Solutions",
+    color: "border-indigo-500",
+    brandColor: "#4f46e5"
+  },
+  {
+    id: 2,
+    quote: "The automation workflows provided by the cloud team have saved us over 40 hours of manual data entry every single month.",
+    client: "David Miller",
+    industry: "Logistics Hub",
+    color: "border-emerald-500",
+    brandColor: "#10b981"
   }
 ];
 
 export const MOCK_DASHBOARD_PROJECTS: DashboardProject[] = [
   {
-    id: 'd1',
-    title: 'E-Commerce Infrastructure Setup',
+    id: 'dp1',
+    title: 'Cloud Migration Phase 2',
     status: 'In Progress',
     progress: 65,
     lastUpdate: '2 hours ago',
-    manager: 'Sarah Thompson',
-    pillar: 'E-Commerce'
+    manager: 'Ava Robot',
+    pillar: 'Cloud'
   },
   {
-    id: 'd2',
-    title: 'Corporate Brand Manual',
-    status: 'Discovery',
-    progress: 20,
-    lastUpdate: 'Yesterday',
-    manager: 'David Chen',
-    pillar: 'Branding'
+    id: 'dp2',
+    title: 'E-Commerce Backend Audit',
+    status: 'Optimization',
+    progress: 85,
+    lastUpdate: '1 day ago',
+    manager: 'Ella Robot',
+    pillar: 'E-Commerce'
   }
 ];
 
 export const MOCK_DASHBOARD_INVOICES: DashboardInvoice[] = [
-  { id: 'INV-4521', date: '20 Feb 2025', amount: 'R5,000', status: 'Paid' },
-  { id: 'INV-4533', date: '25 Feb 2025', amount: 'R2,500', status: 'Pending' }
-];
-
-export const MOCK_LEADS: LeadRecord[] = [
-  { id: 'L101', name: 'Zolani Dlamini', email: 'z.dlamini@techsphere.co.za', service: 'Cloud Automation', status: 'New', timestamp: '1 hour ago' },
-  { id: 'L102', name: 'Mbali Nkosi', email: 'mbali@nkosi-legal.com', service: 'Business Admin', status: 'Contacted', timestamp: '4 hours ago' },
-  { id: 'L103', name: 'James Wilson', email: 'james@wilsonbuilds.com', service: 'Branding', status: 'Proposal', timestamp: 'Yesterday' },
-];
-
-export interface FAQCategory {
-  title: string;
-  items: FAQItem[];
-}
-
-export const FAQ_CATEGORIES: FAQCategory[] = [
   {
-    title: "General & Remote Ops",
-    items: [
-      {
-        question: "Are your services fully online?",
-        answer: "Yes, all our services are 100% digital and designed for remote delivery. We leverage high-performance tools like Slack, Zoom, and Asana to maintain constant communication regardless of your location."
-      },
-      {
-        question: "How do you handle different time zones?",
-        answer: "Marvetti Corp operates on an asynchronous-first model. This means work is documented and managed so that progress never stalls. For synchronous needs, we coordinate specific windows that respect both parties' regional hours."
-      },
-      {
-        question: "What is the Marvetti soft-skills layer?",
-        answer: "Beyond technical delivery, we train our teams in 'Digital Etiquette'—ensuring that every interaction, document, and call is handled with corporate-grade professionalism, high emotional intelligence, and absolute transparency."
-      }
-    ]
+    id: 'INV-2025-001',
+    date: 'Jan 15, 2025',
+    amount: 'R8,500.00',
+    status: 'Paid'
   },
   {
-    title: "Services & Delivery",
-    items: [
-      {
-        question: "How long does a typical project take?",
-        answer: "Speed is one of our core pillars. Standalone services usually take 24-48 hours. Major pillars like E-Commerce setup or Full Brand Identity typically range from 1 to 3 weeks depending on the complexity of your stack."
-      },
-      {
-        question: "Can I combine multiple pillars?",
-        answer: "Absolutely. Most of our high-growth clients combine Branding with E-Commerce and Customer Support. We offer integrated frameworks that ensure your digital ecosystem is cohesive and automated."
-      },
-      {
-        question: "Do you provide ongoing support?",
-        answer: "We focus on a pay-per-solution model to keep you lean, but we do offer 'Optimization' modules as add-ons if you require monthly performance audits or ongoing maintenance."
-      }
-    ]
-  },
-  {
-    title: "Pricing & Payments",
-    items: [
-      {
-        question: "Do I have to pay monthly retainers?",
-        answer: "No. Marvetti Corp is built on the principle of 'Value-Based Procurement'. You pay for specific solutions and packages. No hidden fees, no unnecessary monthly bills unless you explicitly opt for recurring maintenance modules."
-      },
-      {
-        question: "What payment methods are supported?",
-        answer: "We support all major credit cards, EFT, and regional gateways like PayFast and Stripe. All transactions are encrypted and POPIA compliant."
-      },
-      {
-        question: "Is there a refund policy?",
-        answer: "We prioritize total client satisfaction through our phased delivery process. If we fail to meet the specific milestones outlined in your package's Scope of Work, we offer revisions or partial credits based on our service agreement."
-      }
-    ]
-  },
-  {
-    title: "Security & Compliance",
-    items: [
-      {
-        question: "How do you handle my sensitive data?",
-        answer: "Data security is non-negotiable. We use enterprise-grade encryption for all internal and external communication. Your data is handled in strict accordance with POPIA (South Africa) and GDPR standards where applicable."
-      },
-      {
-        question: "Will you sign an NDA?",
-        answer: "Yes. For corporate projects and long-term administrative partnerships, we provide standard Non-Disclosure Agreements as part of our onboarding protocol."
-      }
-    ]
+    id: 'INV-2025-002',
+    date: 'Feb 01, 2025',
+    amount: 'R3,200.00',
+    status: 'Pending'
   }
 ];
 
-export const FAQS: FAQItem[] = FAQ_CATEGORIES.flatMap(cat => cat.items).slice(0, 4);
-
-export const TESTIMONIALS = [
+export const MOCK_LEADS: LeadRecord[] = [
   {
-    id: 't1',
-    client: 'DUBE CAR CARE',
-    industry: 'Automotive Excellence',
-    quote: "Marvetti Corp revolutionized our appointment booking system. Our workshop is now 100% digital, and we've seen a 40% increase in customer throughput.",
-    color: 'border-red-900',
-    brandColor: '#4A0E0E'
+    id: 'l1',
+    name: 'Robert Smith',
+    email: 'robert@apex.com',
+    service: 'Cloud Automation',
+    status: 'New',
+    timestamp: '2025-02-10T10:00:00Z'
   },
   {
-    id: 't2',
-    client: 'MKHONJANA FOUNDATION',
-    industry: 'Social Impact',
-    quote: "Tracking our community outreach impact was a manual nightmare. The custom dashboards provided by Marvetti have given us the clarity to scale our tree-planting initiatives.",
-    color: 'border-emerald-600',
-    brandColor: '#10B981'
-  },
-  {
-    id: 't3',
-    client: 'MODIBANE GAS SOLUTIONS',
-    industry: 'Energy & Logistics',
-    quote: "Inventory management of our gas cylinders is now fully automated via a cloud pipeline. Their technical precision is unmatched in the industry.",
-    color: 'border-yellow-500',
-    brandColor: '#F59E0B'
-  },
-  {
-    id: 't4',
-    client: 'VEVUTI PROJECTS',
-    industry: 'Interior Design',
-    quote: "Our branding kit and website capture our 'Beautiful Spaces' philosophy perfectly. Marvetti truly understands how to translate high-end aesthetics into digital platforms.",
-    color: 'border-blue-900',
-    brandColor: '#1E3A8A'
-  },
-  {
-    id: 't5',
-    client: 'LERATO KE TEBOGO GROUP',
-    industry: 'Heavy Construction',
-    quote: "Pioneers we are, and Marvetti helped us prove it. Modernizing our heavy equipment logistics through AI automation saved us millions in operational overhead.",
-    color: 'border-amber-500',
-    brandColor: '#D97706'
-  },
-  {
-    id: 't6',
-    client: 'LOCHANI PROJECTS',
-    industry: 'Civil Engineering',
-    quote: "Their project management toolsets and data visualizations have brought a new level of precision to our architectural workflows. A vital partner.",
-    color: 'border-green-800',
-    brandColor: '#064E3B'
-  },
-  {
-    id: 't7',
-    client: 'MAWOLELA SECURITY',
-    industry: 'Dignified Guarding',
-    quote: "CX optimization helped us provide real-time reporting to our high-profile clients. Marvetti helped us bridge the gap between physical security and digital transparency.",
-    color: 'border-red-600',
-    brandColor: '#DC2626'
-  },
-  {
-    id: 't8',
-    client: 'EPIQUE CLEANING',
-    industry: 'Management Services',
-    quote: "Simplicity meets elegance. Our digital identity is now as spotless as our service. The automation for recurring client bookings is a game-changer.",
-    color: 'border-sky-500',
-    brandColor: '#0EA5E9'
+    id: 'l2',
+    name: 'Alice Wong',
+    email: 'alice@starlight.org',
+    service: 'Branding',
+    status: 'Contacted',
+    timestamp: '2025-02-11T14:30:00Z'
   }
 ];

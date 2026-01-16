@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+// Added missing Palette, ArrowLeft, and User as UserIcon imports from lucide-react
 import { 
   Users, 
   BarChart3, 
@@ -8,34 +9,42 @@ import {
   ArrowUpRight, 
   Terminal, 
   LogOut, 
-  Sparkles,
-  Zap,
-  FileText,
-  RefreshCw,
-  Globe,
-  Mail,
-  Calendar,
-  Video,
-  Database,
-  Table,
-  Cpu,
-  ShieldCheck,
-  Send,
-  MessageSquare,
-  Activity,
-  Box,
-  Layout,
-  ShoppingCart,
-  Megaphone,
-  Brain,
-  GraduationCap,
-  Headset,
-  CheckCircle2,
-  Briefcase,
-  Cloud,
-  ShieldAlert
+  Sparkles, 
+  Zap, 
+  FileText, 
+  RefreshCw, 
+  Globe, 
+  Mail, 
+  Calendar, 
+  Video, 
+  Database, 
+  Table, 
+  Cpu, 
+  ShieldCheck, 
+  Send, 
+  MessageSquare, 
+  Activity, 
+  Box, 
+  Layout, 
+  ShoppingCart, 
+  Megaphone, 
+  Brain, 
+  GraduationCap, 
+  Headset, 
+  CheckCircle2, 
+  Briefcase, 
+  Cloud, 
+  ShieldAlert, 
+  Search, 
+  Code, 
+  FileCode, 
+  Layers, 
+  Target,
+  Palette,
+  ArrowLeft,
+  User as UserIcon
 } from 'lucide-react';
-import { MOCK_LEADS } from '../constants';
+import { MOCK_LEADS, SERVICES_DATA } from '../constants';
 import { StaffUser, LeadRecord } from '../types';
 import { GoogleGenAI } from "@google/genai";
 
@@ -56,153 +65,127 @@ interface RobotMeta {
   skills: string[];
   tasks: string[];
   instruction: string;
+  outputFormat: string;
+  preferredTools: 'googleSearch'[];
 }
+
+const serviceCatalogContext = SERVICES_DATA.map(s => {
+  const packages = s.packages.map(p => `${p.name}: ${p.price}`).join(", ");
+  return `Vertical: ${s.title} (Starting at ${s.startingPrice}). Description: ${s.shortDescription}. Tiers: ${packages}.`;
+}).join("\n");
 
 const ROBOTS: RobotMeta[] = [
   {
     id: 'ava',
     name: 'AVA',
-    role: 'Administrative Virtual Assistant',
+    role: 'Administrative Operations Lead',
     icon: <Briefcase size={24} />,
     color: 'text-blue-400',
-    description: 'Senior-level virtual administrator focused on organization and coordination.',
-    skills: ['Business administration', 'Scheduling', 'Document management', 'Workflow structuring'],
-    tasks: ['Calendar coordination', 'Document indexing', 'SOP documentation', 'Admin reporting'],
-    instruction: `ROLE: Senior Virtual Administrator.
-      EXECUTION SEQUENCE (MANDATORY):
-      1. Read task: Identify Objective, Deadline, Tools.
-      2. Prepare workspace: Create folders (Drive), Create task (Asana), Log activity (Notion).
-      3. Execute admin task: Scheduling OR organization OR coordination.
-      4. Quality check: Permissions, Accuracy, Completeness.
-      5. Update systems: Mark task status, Add notes.
-      6. Deliver summary: What was done, What's next, Risks.
-      OUTPUTS: Clean calendars, Structured folders, Clear task boards, Admin summaries, SOP documents.`
+    description: 'Senior-level virtual administration and workflow structuring.',
+    skills: ['SOP Design', 'Project Coordination', 'Document Indexing'],
+    tasks: ['Build Project Plan', 'Index Corporate Drive', 'SOP Drafting'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Final Statement of Work (SOW) or Standard Operating Procedure (SOP).',
+    instruction: `ACT AS: Senior Operations Consultant. Produce FINAL implementation-ready SOPs or SOWs.
+      SEQUENCE: 
+      1. Analyze scope. 2. Verify dependencies (Search). 3. Draft milestones. 4. Finalize SOW.`
   },
   {
     id: 'clara',
     name: 'CLARA',
-    role: 'Cloud & Automation Specialist',
+    role: 'Cloud Architecture Engineer',
     icon: <Cloud size={24} />,
     color: 'text-indigo-400',
-    description: 'Cloud organization, access control, and trigger-action workflow automation.',
-    skills: ['Cloud architecture', 'Permission logic', 'Automation design', 'Risk prevention'],
-    tasks: ['Folder hierarchy design', 'Access permission mapping', 'Backup logic', 'Automation flows'],
-    instruction: `ROLE: Cloud & Automation Specialist.
-      EXECUTION SEQUENCE:
-      1. Analyze business structure.
-      2. Design cloud architecture.
-      3. Apply naming & permissions.
-      4. Identify repetitive tasks.
-      5. Build automation flows.
-      6. Test all scenarios.
-      7. Document system in Notion.
-      OUTPUTS: Organized cloud system, Automation flows, Access maps, SOP documentation.`
+    description: 'Security-first cloud scaling and automation protocols.',
+    skills: ['AWS Architecture', 'Make/Zapier Automations', 'POPIA Compliance'],
+    tasks: ['Design Cloud Hierarchy', 'Build Automation Logic', 'Security Audit'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'System Architecture Map or Automation Blueprint (Code/JSON).',
+    instruction: `ACT AS: Lead Cloud Engineer. Produce FINAL production-ready automation logic. 
+      SEQUENCE: 
+      1. Map data flow. 2. Select API tools (Search). 3. Write integration logic. 4. Verify compliance.`
   },
   {
     id: 'brandon',
     name: 'BRANDON',
-    role: 'Brand & Online Identity Strategist',
-    icon: <Sparkles size={24} />,
+    role: 'Brand Identity Architect',
+    icon: <Palette size={24} />,
     color: 'text-rose-400',
-    description: 'Brand voice, messaging consistency, and online identity positioning.',
-    skills: ['Brand positioning', 'Tone of voice', 'Messaging clarity', 'Audience alignment'],
-    tasks: ['Define brand tone', 'Create messaging pillars', 'Write website copy', 'Draft social bios'],
-    instruction: `ROLE: Brand & Online Identity Strategist.
-      EXECUTION SEQUENCE:
-      1. Understand business goals.
-      2. Define brand personality.
-      3. Write tone & messaging guide.
-      4. Produce platform-ready content.
-      5. Validate consistency.
-      OUTPUTS: Brand voice guide, Messaging framework, Website copy drafts, Social profile text.`
+    description: 'Corporate voice, high-impact messaging, and brand guidelines.',
+    skills: ['Brand Strategy', 'Copywriting', 'Design Logic'],
+    tasks: ['Define Brand Voice', 'Write Website Copy', 'Brand Manual Design'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Comprehensive Brand Style Guide or Conversion Copy Sets.',
+    instruction: `ACT AS: Senior Creative Director. Produce FINAL brand pillars or copy sets.
+      SEQUENCE: 
+      1. Audience research (Search). 2. Persona mapping. 3. Voice definition. 4. Final copy delivery.`
   },
   {
     id: 'wes',
     name: 'WES',
-    role: 'Website Architect',
+    role: 'UX/UI Logic Specialist',
     icon: <Layout size={24} />,
     color: 'text-cyan-400',
-    description: 'UX logic, information hierarchy, and conversion flow design.',
-    skills: ['UX thinking', 'Information hierarchy', 'CTA placement', 'Conversion logic'],
-    tasks: ['Page structure planning', 'Navigation logic', 'Content flow mapping', 'CTA optimization'],
-    instruction: `ROLE: Website Architect.
-      EXECUTION SEQUENCE:
-      1. Identify site objective.
-      2. Map pages & sections.
-      3. Design user flow.
-      4. Place CTAs logically.
-      5. Document structure.
-      OUTPUTS: Site map, Page wireframes, Content outlines, UX flow map.`
+    description: 'Information hierarchy and conversion architecture.',
+    skills: ['UX Mapping', 'Wireframing', 'Landing Page Repair'],
+    tasks: ['Design Site Map', 'User Journey Audit', 'CTA Strategy'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'UI Component Library or Full Sitemap Wireframe Schema.',
+    instruction: `ACT AS: Website Architect. Produce FINAL wireframe logic and UX maps.
+      SEQUENCE: 
+      1. Competitor UI audit (Search). 2. Flow mapping. 3. CTA placement. 4. Final Wireframe structure.`
   },
   {
     id: 'ella',
     name: 'ELLA',
-    role: 'E-Commerce Operations Manager',
+    role: 'E-Commerce Ops Director',
     icon: <ShoppingCart size={24} />,
     color: 'text-emerald-400',
-    description: 'Store backend logic, order operations, and payment workflows.',
-    skills: ['Product structuring', 'Payment logic', 'Order workflows', 'Inventory logic'],
-    tasks: ['Product categorization', 'Payment gateway setup', 'Order status workflows', 'Admin dashboards'],
-    instruction: `ROLE: E-Commerce Operations Manager.
-      EXECUTION SEQUENCE:
-      1. Structure products.
-      2. Configure checkout logic.
-      3. Build order workflows.
-      4. Automate notifications.
-      5. Test transactions.
-      OUTPUTS: Functional store backend, Automated order flow, Admin documentation.`
+    description: 'Inventory pipelines and payment gateway logic.',
+    skills: ['Product Logistics', 'Shopify/Woo Scaling', 'Payment Integrity'],
+    tasks: ['Product Category Logic', 'Inventory Sync Plan', 'Gateway Setup Docs'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Store Backend Config Map or Inventory CSV Structure.',
+    instruction: `ACT AS: E-Com Manager. Produce FINAL product-catalog structures or logic.`
   },
   {
     id: 'marcus',
     name: 'MARCUS',
-    role: 'Digital Marketing Strategist',
+    role: 'Growth Marketing Lead',
     icon: <Megaphone size={24} />,
     color: 'text-amber-400',
-    description: 'Campaign planning, ad logic, and audience targeting.',
-    skills: ['Audience targeting', 'Funnel design', 'Copy logic', 'Performance insight'],
-    tasks: ['Campaign structuring', 'Ad copy drafting', 'CTA optimization', 'Performance analysis'],
-    instruction: `ROLE: Digital Marketing Strategist.
-      EXECUTION SEQUENCE:
-      1. Identify campaign goal.
-      2. Define audience.
-      3. Build campaign structure.
-      4. Write ad copy.
-      5. Review performance logic.
-      OUTPUTS: Campaign plan, Ad copy sets, CTA variations, Optimization notes.`
+    description: 'High-ROI digital strategy and ad framework design.',
+    skills: ['SEM/SMM Strategy', 'Funnel Architecture', 'Ad Copy'],
+    tasks: ['Campaign Roadmap', 'Funnel Visualization', 'Budgeting'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Marketing Campaign Blueprint or Funnel Strategy Doc.',
+    instruction: `ACT AS: Performance Strategist. Produce FINAL growth plans.`
   },
   {
     id: 'dara',
     name: 'DARA',
-    role: 'Data & Insights Analyst',
+    role: 'Business Intelligence Analyst',
     icon: <Brain size={24} />,
     color: 'text-purple-400',
-    description: 'Interpreting complex data to extract actionable business decisions.',
-    skills: ['Data interpretation', 'Insight extraction', 'Clear reporting', 'Trend identification'],
-    tasks: ['Dashboard analysis', 'Insight summaries', 'Action recommendations', 'Decision summaries'],
-    instruction: `ROLE: Data & Insights Analyst.
-      EXECUTION SEQUENCE:
-      1. Review data sources.
-      2. Identify trends.
-      3. Extract insights.
-      4. Write recommendations.
-      OUTPUTS: Insight reports, Action plans, Decision summaries.`
+    description: 'Turning raw data into actionable boardroom insights.',
+    skills: ['Data Modeling', 'PowerBI Strategy', 'Trend Forecasting'],
+    tasks: ['Data Schema Design', 'Insight Summary', 'Risk Model'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Data Strategy Report or Dashboard Schema Description.',
+    instruction: `ACT AS: Lead Data Scientist. Produce FINAL insight frameworks.`
   },
   {
     id: 'tina',
     name: 'TINA',
-    role: 'Training & Upskilling Coordinator',
+    role: 'Digital Learning Lead',
     icon: <GraduationCap size={24} />,
     color: 'text-sky-400',
-    description: 'Designing practical, understandable training materials and assessments.',
-    skills: ['Instruction design', 'Simplification', 'Assessment creation', 'Learning paths'],
-    tasks: ['Training outlines', 'Slides/Presentations', 'Exercises', 'Skill assessments'],
-    instruction: `ROLE: Training & Upskilling Coordinator.
-      EXECUTION SEQUENCE:
-      1. Identify learning gaps.
-      2. Design curriculum flow.
-      3. Create simplified training materials.
-      4. Build assessments.
-      OUTPUTS: Training material, Learning paths, Skill assessments.`
+    description: 'Soft-skills upskilling and corporate onboarding protocols.',
+    skills: ['Instructional Design', 'Pedagogy', 'Skill Assessment'],
+    tasks: ['Create Training Module', 'User Manual', 'Skills Gap Analysis'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Complete Training Syllabus or Onboarding Workflow.',
+    instruction: `ACT AS: Upskilling Strategist. Produce FINAL training materials.`
   },
   {
     id: 'cxo',
@@ -210,16 +193,12 @@ const ROBOTS: RobotMeta[] = [
     role: 'Customer Experience Optimizer',
     icon: <Headset size={24} />,
     color: 'text-slate-400',
-    description: 'Customer support workflows, tone guides, and escalation logic.',
-    skills: ['Journey mapping', 'Response tone', 'Escalation logic', 'Chatbot design'],
-    tasks: ['Support workflows', 'Response templates', 'Chatbot logic', 'Message templates'],
-    instruction: `ROLE: Customer Experience Optimizer.
-      EXECUTION SEQUENCE:
-      1. Map customer journey.
-      2. Define tone & escalation rules.
-      3. Create response templates.
-      4. Build support logic maps.
-      OUTPUTS: CX workflows, Message templates, Support logic maps.`
+    description: 'Support desk workflows and client relations protocols.',
+    skills: ['Journey Mapping', 'Escalation Logic', 'Response Tone'],
+    tasks: ['Support Script Set', 'Escalation Framework', 'Ticketing Flow'],
+    preferredTools: ['googleSearch'],
+    outputFormat: 'Customer Service Standard manual or Response Template sets.',
+    instruction: `ACT AS: CX Director. Produce FINAL service standards.`
   }
 ];
 
@@ -228,7 +207,7 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
   const [selectedRobotId, setSelectedRobotId] = useState<string | null>(null);
   const [leads, setLeads] = useState<LeadRecord[]>(MOCK_LEADS);
   const [robotInput, setRobotInput] = useState('');
-  const [robotChat, setRobotChat] = useState<{role: 'user' | 'bot', text: string}[]>([]);
+  const [robotChat, setRobotChat] = useState<{role: 'user' | 'bot', text: string, grounding?: any[]}[]>([]);
   const [isRobotLoading, setIsRobotLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -254,78 +233,84 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemContext = `
-        MASTER RULES:
-        - You are invisible to clients.
-        - Never mention AI, automation, systems, or tools (even though you use Magic Loops/Make internally).
-        - Communicate in calm, professional, human business language.
-        - Prioritize clarity, order, and follow-through.
-        - If information is missing, ask internally (me) — never guess.
-        - Always produce structured, usable outputs.
-        - Think like a senior consultant, not a chatbot.
+        INTERNAL AGENT IDENTITY: ${selectedRobot.name} // ${selectedRobot.role}
         
-        CONTROL BOTS INTEGRATION (ALWAYS ACTIVE):
-        - QA BOT: Checks scope, completeness, and accuracy.
-        - COMPLIANCE BOT: Ensures POPIA and data handling standards.
-        - DELIVERY BOT: Produces client-ready summaries (free of AI language).
+        PRODUCTION GOAL: Generate a ${selectedRobot.outputFormat}. 
+        This is a FINAL output for Marvetti Corp clients.
+        
+        INTERNAL BUSINESS CONTEXT:
+        ${serviceCatalogContext}
 
-        SPECIFIC MODULE INSTRUCTIONS:
+        AGENCY GUIDELINES:
+        - NEVER mention you are an AI or bot.
+        - Tone: Senior Digital Strategist, Calm, Objective-focused.
+        - Style: High-density intelligence, Markdown formatted, Implementation-ready.
+        - Grounding: Use Google Search to find real tools, pricing, or competitor data if relevant to the request.
+        
         ${selectedRobot.instruction}
       `;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview', // Upgraded for "Full Functional Mode"
+        model: 'gemini-3-pro-preview',
         contents: promptText,
         config: {
           systemInstruction: systemContext,
-          temperature: 0.5 // Lower temperature for professional precision
+          temperature: 0.4,
+          thinkingConfig: { thinkingBudget: 32768 },
+          tools: [{ googleSearch: {} }]
         }
       });
 
-      const botResponse = response.text || "Operational error. Re-initializing logic path...";
-      setRobotChat(prev => [...prev, { role: 'bot', text: botResponse }]);
+      const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+      const botResponse = response.text || "Interface Fault. Re-calculating logic path...";
+      
+      setRobotChat(prev => [...prev, { 
+        role: 'bot', 
+        text: botResponse,
+        grounding: groundingChunks
+      }]);
     } catch (error) {
       console.error(error);
-      setRobotChat(prev => [...prev, { role: 'bot', text: "Error in Intelligence Layer. Connection interrupted." }]);
+      setRobotChat(prev => [...prev, { role: 'bot', text: "Operational Error: Intelligence link severed." }]);
     } finally {
       setIsRobotLoading(false);
     }
   };
 
   const WORKSPACE_TOOLS = [
-    { name: 'Ops Gmail', icon: <Mail size={24} />, desc: 'Internal staff communication & client outreach.', link: 'https://mail.google.com' },
-    { name: 'Shared Drive', icon: <Database size={24} />, desc: 'Project assets, brand kits & client documentation.', link: 'https://drive.google.com' },
-    { name: 'Internal Calendar', icon: <Calendar size={24} />, desc: 'Discovery calls & project milestone tracking.', link: 'https://calendar.google.com' },
-    { name: 'Ops Meet', icon: <Video size={24} />, desc: 'Daily stand-ups & remote client presentations.', link: 'https://meet.google.com' },
-    { name: 'Lead Tracker (Sheets)', icon: <Table size={24} />, desc: 'Master lead log and financial tracking.', link: 'https://sheets.google.com' },
-    { name: 'Standard SOWs (Docs)', icon: <FileText size={24} />, desc: 'Contract templates & statement of work drafts.', link: 'https://docs.google.com' }
+    { name: 'Ops Hub', icon: <Mail size={24} />, desc: 'Core communications layer.', link: 'https://mail.google.com' },
+    { name: 'Infrastructure Drive', icon: <Database size={24} />, desc: 'Master asset storage.', link: 'https://drive.google.com' },
+    { name: 'Milestone Calendar', icon: <Calendar size={24} />, desc: 'Project timelines.', link: 'https://calendar.google.com' },
+    { name: 'Nexus Sheets', icon: <Table size={24} />, desc: 'Lead and revenue monitoring.', link: 'https://sheets.google.com' },
+    { name: 'Ops Console', icon: <Terminal size={24} />, desc: 'Direct internal API tools.', link: '#' }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300 font-inter flex">
+    <div className="min-h-screen bg-slate-950 text-slate-300 font-inter flex animate-in fade-in duration-700">
       {/* Side Navigation */}
-      <aside className="w-72 bg-slate-900 border-r border-slate-800 p-8 flex flex-col fixed h-screen z-50">
+      <aside className="w-72 bg-slate-900 border-r border-slate-800 p-8 flex flex-col fixed h-screen z-50 shadow-2xl">
         <div className="mb-12">
           <div className="text-xl font-black text-white tracking-tighter uppercase mb-2">
             MARVETTI <span className="text-indigo-500">INTERNAL</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-lg w-fit">
             <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
-            <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">Ops Layer v5.0</span>
+            <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">v6.2 Deep Mind Active</span>
           </div>
         </div>
 
         <nav className="flex-grow space-y-2">
           {[
-            { id: 'intelligence', label: 'Intelligence Hub', icon: <Cpu size={18} /> },
-            { id: 'leads', label: 'Lead Management', icon: <Users size={18} /> },
-            { id: 'workspace', label: 'Workspace', icon: <Globe size={18} /> },
-            { id: 'analytics', label: 'Financial Ops', icon: <BarChart3 size={18} /> }
+            { id: 'intelligence', label: 'Reasoning Agents', icon: <Cpu size={18} /> },
+            { id: 'leads', label: 'Revenue Pipeline', icon: <Users size={18} /> },
+            { id: 'workspace', label: 'Ops Control', icon: <Globe size={18} /> },
+            { id: 'analytics', label: 'Verticals', icon: <BarChart3 size={18} /> }
           ].map((item) => (
             <button 
               key={item.id}
               onClick={() => { setActiveTab(item.id as TabType); setSelectedRobotId(null); }}
               className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                activeTab === item.id ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20' : 'hover:bg-slate-800 text-slate-500 hover:text-white'
+                activeTab === item.id ? 'bg-indigo-600 text-white shadow-2xl shadow-indigo-600/30 ring-1 ring-white/10' : 'hover:bg-slate-800 text-slate-500 hover:text-white'
               }`}
             >
               {item.icon}
@@ -335,20 +320,20 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
         </nav>
 
         <div className="pt-8 mt-auto border-t border-slate-800 space-y-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-950 border border-white/5 shadow-inner">
              <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-indigo-400 border border-slate-700">
                 <Terminal size={18} />
              </div>
              <div>
                 <div className="text-[10px] font-black text-white uppercase tracking-tight">{user.name}</div>
-                <div className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{user.role}</div>
+                <div className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{user.role} // access_lvl_5</div>
              </div>
           </div>
           <button 
             onClick={onLogout}
-            className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-rose-500 hover:bg-rose-500/10 transition-all"
+            className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-rose-500 hover:bg-rose-500/10 transition-all border border-transparent hover:border-rose-500/20"
           >
-            <LogOut size={18} /> Logout Session
+            <LogOut size={18} /> Terminate Session
           </button>
         </div>
       </aside>
@@ -358,164 +343,188 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
         <header className="flex items-center justify-between mb-16">
           <div>
             <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
-              {activeTab === 'leads' ? 'Lead Pipeline' : activeTab === 'workspace' ? 'Workspace Command' : activeTab === 'analytics' ? 'Financials' : 'Intelligence Hub'}
+              {activeTab === 'leads' ? 'Pipeline Control' : activeTab === 'workspace' ? 'Operational Hub' : activeTab === 'analytics' ? 'Boardroom Data' : 'Deep Reasoning Agents'}
             </h1>
             <p className="text-slate-500 mt-2 text-sm font-medium uppercase tracking-widest flex items-center gap-2">
-               <Activity size={14} className="text-indigo-500" /> Operational Matrix Status: Fully Operational
+               <Activity size={14} className="text-indigo-500" /> Operational Status: 32K Thinking Path Enabled
             </p>
           </div>
           <div className="flex gap-4">
-            <button className="relative p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 hover:text-white transition-all">
+            <button className="relative p-4 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 hover:text-white transition-all shadow-xl">
               <Bell size={20} />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-slate-900"></span>
+              <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-indigo-500 rounded-full border-2 border-slate-900"></span>
             </button>
-            <button className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 hover:text-white transition-all">
+            <button className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-slate-500 hover:text-white transition-all shadow-xl">
               <Settings size={20} />
             </button>
           </div>
         </header>
 
-        {/* Intelligence Hub Tab */}
+        {/* Reasoning Agents Tab */}
         {activeTab === 'intelligence' && (
           <div className="animate-in fade-in duration-500">
             {!selectedRobotId ? (
               <div className="space-y-12">
-                <div className="bg-slate-900 p-12 rounded-[4rem] border border-slate-800 relative overflow-hidden">
+                <div className="bg-slate-900 p-12 rounded-[4rem] border border-white/5 relative overflow-hidden shadow-2xl">
                    <div className="absolute top-0 right-0 p-12 opacity-5">
-                      <Cpu size={200} className="text-white" />
+                      <Cpu size={250} className="text-white" />
                    </div>
                    <div className="max-w-xl relative z-10">
-                      <h3 className="text-xl font-black text-white uppercase tracking-widest mb-4">Internal Intelligence Network</h3>
+                      <h3 className="text-xl font-black text-white uppercase tracking-widest mb-4">Internal Intelligence Core</h3>
                       <p className="text-slate-400 text-sm font-medium leading-relaxed">
-                        9 Specialized Intelligence Modules active. Select a robot to initiate its mandatory execution sequence.
+                        9 specialized Senior Agents ready for deep objective reasoning. These agents use Gemini 3 Pro with high-density thinking to produce FINAL implementation-ready deliverables.
                       </p>
                    </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-3 gap-8">
                   {ROBOTS.map((robot) => (
                     <button
                       key={robot.id}
                       onClick={() => { setSelectedRobotId(robot.id); setRobotChat([]); }}
-                      className="bg-slate-900 p-10 rounded-[3rem] border border-slate-800 hover:border-indigo-500 transition-all hover:bg-slate-800/50 flex flex-col items-start text-left group"
+                      className="bg-slate-900 p-10 rounded-[3.5rem] border border-white/5 hover:border-indigo-500 transition-all hover:bg-slate-800/50 flex flex-col items-start text-left group shadow-xl hover:-translate-y-2 duration-500"
                     >
-                      <div className={`w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center ${robot.color} group-hover:bg-indigo-500/10 group-hover:border-indigo-500/20 transition-all mb-8 shadow-sm`}>
+                      <div className={`w-16 h-16 rounded-2xl bg-slate-950 border border-white/5 flex items-center justify-center ${robot.color} group-hover:bg-indigo-500/10 group-hover:border-indigo-500/20 transition-all mb-8 shadow-sm group-hover:scale-110 duration-500`}>
                         {robot.icon}
                       </div>
-                      <h4 className="text-lg font-black text-white uppercase tracking-tight mb-3 group-hover:text-indigo-400 transition-colors">{robot.name}</h4>
-                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">{robot.role}</p>
-                      <p className="text-xs text-slate-500 font-medium leading-relaxed flex-grow line-clamp-2">
+                      <h4 className="text-xl font-black text-white uppercase tracking-tight mb-3 group-hover:text-indigo-400 transition-colors">{robot.name}</h4>
+                      <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4">{robot.role}</p>
+                      <p className="text-xs text-slate-500 font-medium leading-relaxed flex-grow line-clamp-3">
                         {robot.description}
                       </p>
-                      <div className="mt-8 pt-6 border-t border-slate-800 w-full flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-400">
-                        Initiate Strategy <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      <div className="mt-8 pt-8 border-t border-white/5 w-full flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-400 transition-all">
+                        <span className="flex items-center gap-2"><Zap size={12} className="text-indigo-500" /> Reasoning Active</span>
+                        <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                       </div>
                     </button>
                   ))}
                 </div>
               </div>
             ) : (
-              <div className="grid lg:grid-cols-3 gap-8 h-[calc(100vh-250px)]">
-                {/* Robot Info Sidebar */}
-                <div className="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-[3.5rem] p-10 flex flex-col animate-in slide-in-from-left-4 duration-500">
+              <div className="grid lg:grid-cols-3 gap-10 h-[calc(100vh-280px)]">
+                {/* Agent Profile Sidebar */}
+                <div className="lg:col-span-1 bg-slate-900 border border-white/5 rounded-[4rem] p-12 flex flex-col animate-in slide-in-from-left-4 duration-700 shadow-2xl overflow-hidden relative">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                  
                   <button 
                     onClick={() => setSelectedRobotId(null)}
-                    className="mb-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors"
+                    className="mb-10 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 hover:text-white transition-colors"
                   >
-                    Return to Network
+                    <ArrowLeft size={16} /> Reasoning Network
                   </button>
                   
-                  <div className={`w-20 h-20 rounded-[2rem] bg-slate-950 border border-slate-800 flex items-center justify-center ${selectedRobot?.color} mb-8 shadow-2xl`}>
+                  <div className={`w-24 h-24 rounded-[2.5rem] bg-slate-950 border border-white/10 flex items-center justify-center ${selectedRobot?.color} mb-10 shadow-2xl ring-1 ring-white/5`}>
                     {selectedRobot?.icon}
                   </div>
                   
-                  <h2 className="text-3xl font-black text-white tracking-tighter uppercase mb-2">{selectedRobot?.name}</h2>
-                  <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-10">{selectedRobot?.role}</p>
+                  <h2 className="text-4xl font-black text-white tracking-tighter uppercase mb-2">{selectedRobot?.name}</h2>
+                  <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em] mb-12">{selectedRobot?.role}</p>
                   
-                  <div className="space-y-8 overflow-y-auto pr-4">
-                    <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10">
-                      <div className="flex items-center gap-2 mb-2">
-                        <ShieldAlert size={12} className="text-indigo-400" />
-                        <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Robot Status</span>
+                  <div className="space-y-10 overflow-y-auto pr-4 scrollbar-hide flex-grow">
+                    <div className="p-5 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 shadow-inner">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Target size={14} className="text-indigo-400" />
+                        <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Logic Engine</span>
                       </div>
-                      <div className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                        Fully Operational Mode
+                      <div className="text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-3">
+                        <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                        32K Reasoning Path Active
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Core Skills</h4>
+                      <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-5">Production Tools</h4>
                       <div className="flex flex-wrap gap-2">
                         {selectedRobot?.skills.map(skill => (
-                          <span key={skill} className="px-3 py-1.5 bg-slate-800 rounded-lg text-[9px] font-black text-slate-300 uppercase tracking-widest border border-slate-700">{skill}</span>
+                          <span key={skill} className="px-4 py-2 bg-slate-800/50 rounded-xl text-[10px] font-black text-slate-300 uppercase tracking-widest border border-white/5 shadow-sm">{skill}</span>
                         ))}
                       </div>
                     </div>
-                    
+
                     <div>
-                      <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Standard Tasks</h4>
-                      <ul className="space-y-3">
-                        {selectedRobot?.tasks.map(task => (
-                          <li key={task} className="flex items-center gap-3 text-xs text-slate-400 font-medium">
-                            <CheckCircle2 size={14} className="text-emerald-500 shrink-0" /> {task}
-                          </li>
-                        ))}
-                      </ul>
+                      <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-5">Grounding Protocol</h4>
+                      <div className="p-5 rounded-2xl bg-slate-950 border border-white/5 shadow-inner space-y-4">
+                         <div className="flex items-center gap-3">
+                            <Search size={14} className="text-indigo-400" />
+                            <span className="text-[10px] font-black uppercase text-white tracking-tight">Global Search Grounding</span>
+                         </div>
+                         <div className="flex items-center gap-3">
+                            <Layers size={14} className="text-emerald-400" />
+                            <span className="text-[10px] font-black uppercase text-white tracking-tight">Marvetti Catalog Logic</span>
+                         </div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="mt-auto pt-8 border-t border-slate-800">
-                    <div className="flex items-center gap-4 p-4 bg-slate-950 rounded-2xl border border-white/5">
-                      <ShieldCheck size={18} className="text-indigo-400" />
+                  <div className="mt-8 pt-8 border-t border-white/5">
+                    <div className="flex items-center gap-4 p-5 bg-slate-950 rounded-[2rem] border border-white/5 shadow-inner">
+                      <ShieldCheck size={22} className="text-indigo-400" />
                       <div>
-                        <div className="text-[9px] font-black text-white uppercase tracking-widest">Compliance Active</div>
-                        <div className="text-[8px] text-slate-500 uppercase font-black tracking-widest">POPIA Layer v2.1</div>
+                        <div className="text-[10px] font-black text-white uppercase tracking-widest">Secure Production</div>
+                        <div className="text-[8px] text-slate-500 uppercase font-black tracking-widest">POPIA / GDPR Compliant Layer</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Robot Interaction Hub */}
-                <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-[3.5rem] flex flex-col overflow-hidden animate-in slide-in-from-right-4 duration-500">
-                  {/* Chat Display */}
-                  <div className="flex-grow p-10 overflow-y-auto space-y-8 scroll-smooth">
+                {/* Reasoning interaction Hub */}
+                <div className="lg:col-span-2 bg-slate-900 border border-white/5 rounded-[4rem] flex flex-col overflow-hidden animate-in slide-in-from-right-4 duration-700 shadow-2xl">
+                  {/* Reasoning Display */}
+                  <div className="flex-grow p-12 overflow-y-auto space-y-10 scroll-smooth scrollbar-hide bg-[radial-gradient(circle_at_top_right,rgba(79,70,229,0.02),transparent)]">
                     {robotChat.length === 0 ? (
-                      <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                        <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-slate-600 mb-6 animate-pulse">
-                          <Terminal size={32} />
+                      <div className="h-full flex flex-col items-center justify-center text-center p-12">
+                        <div className="w-20 h-20 rounded-[2rem] bg-slate-800 border border-white/5 flex items-center justify-center text-slate-700 mb-8 shadow-inner ring-1 ring-white/5">
+                          <Terminal size={40} />
                         </div>
-                        <h3 className="text-lg font-black text-slate-400 uppercase tracking-widest mb-4">Interface Initialized</h3>
-                        <p className="text-xs text-slate-500 max-w-sm font-medium leading-relaxed">
-                          Identify Objective, Deadline, and Tools for {selectedRobot?.name} to begin the mandatory execution sequence.
+                        <h3 className="text-xl font-black text-slate-500 uppercase tracking-widest mb-4">Neural Link Established</h3>
+                        <p className="text-xs text-slate-600 max-w-sm font-medium leading-relaxed uppercase tracking-tighter">
+                          Define the objective to begin the 32K deep thinking sequence for this agent.
                         </p>
                       </div>
                     ) : (
                       robotChat.map((msg, idx) => (
-                        <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}>
-                          <div className={`max-w-[85%] p-6 rounded-[2rem] text-sm leading-relaxed ${
+                        <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in slide-in-from-bottom-4 duration-500`}>
+                          <div className={`max-w-[90%] p-8 rounded-[3rem] text-sm leading-relaxed shadow-2xl ${
                             msg.role === 'user' 
-                              ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg' 
-                              : 'bg-slate-800 text-slate-300 rounded-tl-none border border-slate-700 shadow-xl'
+                              ? 'bg-indigo-600 text-white rounded-tr-none ring-1 ring-white/20' 
+                              : 'bg-slate-800 text-slate-300 rounded-tl-none border border-white/5 shadow-indigo-900/10'
                           }`}>
-                            <div className="flex items-center gap-2 mb-2 opacity-50">
-                              {msg.role === 'bot' ? <Terminal size={12} /> : <Users size={12} />}
-                              <span className="text-[8px] font-black uppercase tracking-widest">
-                                {msg.role === 'bot' ? `${selectedRobot?.name} // Internal Strategy` : 'Command Input'}
+                            <div className="flex items-center gap-3 mb-6 opacity-40">
+                              {msg.role === 'bot' ? <Cpu size={14} /> : <UserIcon size={14} />}
+                              <span className="text-[9px] font-black uppercase tracking-widest">
+                                {msg.role === 'bot' ? `${selectedRobot?.name} // Senior Output` : 'Staff Command Input'}
                               </span>
                             </div>
-                            <div className="whitespace-pre-wrap font-medium">
+                            <div className="whitespace-pre-wrap font-medium prose prose-invert prose-sm max-w-none">
                               {msg.text}
                             </div>
+                            {msg.grounding && (
+                              <div className="mt-10 pt-10 border-t border-white/5 space-y-4">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400 block">Grounding Resources (External Intelligence)</span>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                  {msg.grounding.map((chunk: any, ci: number) => chunk.web && (
+                                    <a key={ci} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-slate-950/50 border border-white/5 rounded-2xl text-[10px] text-slate-400 hover:text-indigo-400 hover:border-indigo-500/30 transition-all group/link">
+                                      <Globe size={14} className="group-hover/link:animate-pulse" /> 
+                                      <span className="truncate">{chunk.web.title || "External Intelligence Doc"}</span>
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))
                     )}
                     {isRobotLoading && (
                       <div className="flex justify-start animate-pulse">
-                        <div className="bg-slate-800 p-6 rounded-[2rem] rounded-tl-none border border-slate-700 flex items-center gap-4">
-                          <RefreshCw size={16} className="text-indigo-400 animate-spin" />
-                          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em]">Processing Logic Path...</span>
+                        <div className="bg-slate-800 p-8 rounded-[3rem] rounded-tl-none border border-white/5 flex flex-col gap-6 shadow-2xl ring-1 ring-white/5">
+                          <div className="flex items-center gap-4">
+                            <RefreshCw size={20} className="text-indigo-400 animate-spin" />
+                            <span className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.4em]">Processing deep mind path...</span>
+                          </div>
+                          <div className="h-1.5 w-64 bg-slate-700 rounded-full overflow-hidden shadow-inner">
+                             <div className="h-full bg-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.8)] w-full origin-left animate-[loading-bar_4s_infinite]"></div>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -523,31 +532,29 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
                   </div>
 
                   {/* Input Layer */}
-                  <div className="p-8 bg-slate-950/50 border-t border-slate-800">
-                    <div className="relative flex items-center gap-4">
+                  <div className="p-10 bg-slate-950/50 border-t border-white/5 shadow-2xl relative">
+                    <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent"></div>
+                    <div className="relative flex items-center gap-6">
                       <input 
                         type="text" 
                         value={robotInput}
                         onChange={(e) => setRobotInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && runRobotTask()}
-                        placeholder={`Provide objective for ${selectedRobot?.name}...`}
-                        className="flex-grow bg-slate-900 border border-slate-800 rounded-2xl px-6 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium transition-all"
+                        placeholder={`Brief ${selectedRobot?.name} on objective...`}
+                        className="flex-grow bg-slate-900 border border-white/5 rounded-[2rem] px-8 py-5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-600 font-medium transition-all shadow-inner placeholder:text-slate-800"
                         disabled={isRobotLoading}
                       />
                       <button 
                         onClick={runRobotTask}
                         disabled={isRobotLoading || !robotInput.trim()}
-                        className="p-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-2xl transition-all shadow-xl shadow-indigo-600/20"
+                        className="p-5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-800 disabled:opacity-50 text-white rounded-[2rem] transition-all shadow-2xl shadow-indigo-900/30 active:scale-95 group/send"
                       >
-                        <Send size={20} />
+                        <Send size={24} className="group-hover/send:translate-x-1 group-hover/send:-translate-y-1 transition-transform duration-300" />
                       </button>
                     </div>
-                    <div className="flex justify-between items-center mt-4 px-2">
-                       <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">
-                          <Activity size={10} /> Senior Consultant Reasoning Mode Active
-                       </span>
-                       <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">
-                          Invisible Command Layer
+                    <div className="flex justify-between items-center mt-6 px-4">
+                       <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest flex items-center gap-3">
+                          <Activity size={12} className="text-indigo-500 animate-pulse" /> Logic Tunnel: DeepReasoning-v1-FinalOutput
                        </span>
                     </div>
                   </div>
@@ -557,58 +564,55 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
           </div>
         )}
 
-        {/* Lead Management Tab */}
+        {/* Lead Management Tab (Minimal update for aesthetic parity) */}
         {activeTab === 'leads' && (
-          <div className="space-y-8 animate-in fade-in duration-500">
-             <div className="grid md:grid-cols-3 gap-6">
+          <div className="space-y-10 animate-in fade-in duration-700">
+             <div className="grid md:grid-cols-3 gap-8">
                 {[
-                  { label: 'Uncontacted', value: leads.filter(l => l.status === 'New').length, color: 'text-indigo-400' },
-                  { label: 'Total Active', value: leads.length, color: 'text-white' },
-                  { label: 'Closure Rate', value: '28%', color: 'text-emerald-400' }
+                  { label: 'Pending Response', value: leads.filter(l => l.status === 'New').length, color: 'text-indigo-400' },
+                  { label: 'Active pipeline', value: leads.length, color: 'text-white' },
+                  { label: 'Closure Matrix', value: '28%', color: 'text-emerald-400' }
                 ].map((stat, idx) => (
-                  <div key={idx} className="bg-slate-900 p-8 rounded-[2.5rem] border border-slate-800">
-                    <div className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-3">{stat.label}</div>
-                    <div className={`text-4xl font-black tracking-tighter ${stat.color}`}>{stat.value}</div>
+                  <div key={idx} className="bg-slate-900 p-10 rounded-[3.5rem] border border-white/5 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-5 transition-opacity duration-500"><Target size={80} /></div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4">{stat.label}</div>
+                    <div className={`text-5xl font-black tracking-tighter ${stat.color}`}>{stat.value}</div>
                   </div>
                 ))}
              </div>
 
-             <div className="bg-slate-900 rounded-[3rem] border border-slate-800 overflow-hidden">
+             <div className="bg-slate-900 rounded-[4rem] border border-white/5 overflow-hidden shadow-2xl">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-800/50">
+                  <thead className="bg-slate-800/30 border-b border-white/5">
                     <tr>
-                      <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Lead Name</th>
-                      <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Target Pillar</th>
-                      <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                      <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Age</th>
-                      <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
+                      <th className="px-10 py-8 text-[11px] font-black text-slate-400 uppercase tracking-widest">Lead Identity</th>
+                      <th className="px-10 py-8 text-[11px] font-black text-slate-400 uppercase tracking-widest">Target Pillar</th>
+                      <th className="px-10 py-8 text-[11px] font-black text-slate-400 uppercase tracking-widest">Current Status</th>
+                      <th className="px-10 py-8 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Ops Control</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-white/5">
                     {leads.map((lead) => (
-                      <tr key={lead.id} className="hover:bg-slate-800/30 transition-colors">
-                        <td className="px-8 py-6">
-                          <div className="text-sm font-bold text-white">{lead.name}</div>
-                          <div className="text-[10px] text-slate-500">{lead.email}</div>
+                      <tr key={lead.id} className="hover:bg-slate-800/40 transition-colors group">
+                        <td className="px-10 py-8">
+                          <div className="text-sm font-black text-white uppercase tracking-tight mb-1">{lead.name}</div>
+                          <div className="text-[10px] text-slate-500 uppercase tracking-widest">{lead.email}</div>
                         </td>
-                        <td className="px-8 py-6">
+                        <td className="px-10 py-8">
                           <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{lead.service}</span>
                         </td>
-                        <td className="px-8 py-6">
-                          <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                            lead.status === 'New' ? 'bg-indigo-500/10 text-indigo-400' : 
-                            lead.status === 'Contacted' ? 'bg-amber-500/10 text-amber-400' : 
-                            'bg-emerald-500/10 text-emerald-400'
+                        <td className="px-10 py-8">
+                          <span className={`px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-inner ${
+                            lead.status === 'New' ? 'bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20' : 
+                            lead.status === 'Contacted' ? 'bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20' : 
+                            'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20'
                           }`}>
                             {lead.status}
                           </span>
                         </td>
-                        <td className="px-8 py-6 text-xs text-slate-500 font-medium">
-                          {lead.timestamp}
-                        </td>
-                        <td className="px-8 py-6 text-right">
-                          <button className="p-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-all">
-                             <ArrowUpRight size={16} />
+                        <td className="px-10 py-8 text-right">
+                          <button className="p-3 rounded-2xl bg-slate-800 border border-white/5 text-slate-500 hover:text-white hover:bg-indigo-600 transition-all shadow-sm group-hover:scale-110">
+                             <ArrowUpRight size={18} />
                           </button>
                         </td>
                       </tr>
@@ -621,78 +625,50 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
 
         {/* Workspace Tab */}
         {activeTab === 'workspace' && (
-          <div className="space-y-12 animate-in fade-in duration-500">
-            <div className="bg-slate-900 p-12 rounded-[4rem] border border-slate-800 relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-12 opacity-5">
-                  <Globe size={200} className="text-white" />
+          <div className="space-y-12 animate-in fade-in duration-700">
+            <div className="bg-slate-900 p-16 rounded-[4rem] border border-white/5 relative overflow-hidden shadow-2xl">
+               <div className="absolute top-0 right-0 p-16 opacity-5">
+                  <Globe size={300} className="text-white" />
                </div>
                <div className="max-w-xl relative z-10">
-                  <h3 className="text-xl font-black text-white uppercase tracking-widest mb-4">Core Infrastructure Hub</h3>
-                  <p className="text-slate-400 text-sm font-medium leading-relaxed">
-                    Marvetti Corp runs on a customized Google Workspace stack. Use these shortcuts to manage your internal tasks and client communications.
+                  <h3 className="text-2xl font-black text-white uppercase tracking-widest mb-6">Core Infrastructure Hub</h3>
+                  <p className="text-slate-400 text-base font-medium leading-relaxed">
+                    Marvetti Corp runs on a security-hardened Google Workspace ecosystem. Use these production tunnels to manage internal tasks and client deployments.
                   </p>
                </div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                {WORKSPACE_TOOLS.map((tool, idx) => (
                  <a 
                   key={idx}
                   href={tool.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group bg-slate-900 p-10 rounded-[3rem] border border-slate-800 hover:border-indigo-500 transition-all hover:bg-slate-800/50 flex flex-col"
+                  className="group bg-slate-900 p-12 rounded-[4rem] border border-white/5 hover:border-indigo-500 transition-all hover:bg-slate-800/50 flex flex-col shadow-2xl duration-500 hover:-translate-y-2"
                  >
-                   <div className="w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 group-hover:text-indigo-400 group-hover:bg-indigo-500/10 group-hover:border-indigo-500/20 transition-all mb-8 shadow-sm">
+                   <div className="w-16 h-16 rounded-2xl bg-slate-950 border border-white/5 flex items-center justify-center text-slate-500 group-hover:text-indigo-400 group-hover:bg-indigo-500/10 transition-all mb-10 shadow-inner group-hover:scale-110 duration-500">
                       {tool.icon}
                    </div>
-                   <h4 className="text-lg font-black text-white uppercase tracking-tight mb-3 group-hover:text-indigo-400 transition-colors">{tool.name}</h4>
+                   <h4 className="text-xl font-black text-white uppercase tracking-tight mb-4 group-hover:text-indigo-400 transition-colors">{tool.name}</h4>
                    <p className="text-xs text-slate-500 font-medium leading-relaxed flex-grow">
                       {tool.desc}
                    </p>
-                   <div className="mt-8 pt-6 border-t border-slate-800 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-400">
-                      Initialize Tool <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                   <div className="mt-10 pt-8 border-t border-white/5 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-indigo-400">
+                      Secure Entry <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" />
                    </div>
                  </a>
                ))}
             </div>
           </div>
         )}
-
-        {/* Financial Ops Tab */}
-        {activeTab === 'analytics' && (
-          <div className="space-y-8 animate-in fade-in duration-500">
-             <div className="bg-slate-900 p-12 rounded-[4rem] border border-slate-800 flex flex-col md:flex-row items-center gap-12">
-                <div className="w-full md:w-1/2 space-y-6">
-                   <h3 className="text-xl font-black text-white uppercase tracking-widest">Performance Metrics</h3>
-                   <div className="space-y-4">
-                      {['Branding', 'Cloud', 'Customer Service', 'E-Commerce'].map(p => (
-                        <div key={p} className="space-y-2">
-                           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                              <span>{p}</span>
-                              <span className="text-indigo-400">R{Math.floor(Math.random() * 50000)} rev</span>
-                           </div>
-                           <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-indigo-500" style={{ width: `${Math.random() * 100}%` }}></div>
-                           </div>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-                <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-                   <div className="p-8 rounded-[2.5rem] bg-slate-800/50 border border-slate-700 text-center">
-                      <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Total MRR</div>
-                      <div className="text-2xl font-black text-white tracking-tighter uppercase">R185,200</div>
-                   </div>
-                   <div className="p-8 rounded-[2.5rem] bg-emerald-50/5 border border-emerald-500/20 text-center text-emerald-400">
-                      <div className="text-[9px] font-black uppercase tracking-widest mb-2">Net Growth</div>
-                      <div className="text-2xl font-black tracking-tighter uppercase">+14.2%</div>
-                   </div>
-                </div>
-             </div>
-          </div>
-        )}
       </main>
+      <style>{`
+        @keyframes loading-bar {
+          0% { transform: scaleX(0); }
+          100% { transform: scaleX(1); }
+        }
+      `}</style>
     </div>
   );
 };

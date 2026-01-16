@@ -17,6 +17,7 @@ import ClientDashboard from './components/ClientDashboard';
 import ClientAuth from './components/ClientAuth';
 import StaffDashboard from './components/StaffDashboard';
 import StaffAuth from './components/StaffAuth';
+import AIStudio from './components/AIStudio';
 import Footer from './components/Footer';
 import ServicePage from './components/ServicePage';
 import HowItWorksPage from './components/HowItWorksPage';
@@ -25,7 +26,7 @@ import { SERVICES_DATA } from './constants';
 import { User, StaffUser } from './types';
 import { MessageCircle, ArrowUpRight } from 'lucide-react';
 
-type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | 'dashboard' | 'auth' | 'staff-dashboard' | 'staff-auth' | string;
+type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | 'dashboard' | 'auth' | 'staff-dashboard' | 'staff-auth' | 'ai-studio' | string;
 
 const App: React.FC = () => {
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -35,14 +36,13 @@ const App: React.FC = () => {
   const [currentStaff, setCurrentStaff] = useState<StaffUser | null>(null);
 
   useEffect(() => {
-    // Check sessions
+    // Robust hydration sequence
     const savedUser = localStorage.getItem('marvetti_user');
     if (savedUser) setCurrentUser(JSON.parse(savedUser));
 
     const savedStaff = localStorage.getItem('marvetti_staff');
     if (savedStaff) setCurrentStaff(JSON.parse(savedStaff));
 
-    // Handle deep-linking via query params (e.g. ?view=staff)
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
     if (viewParam === 'staff') {
@@ -66,7 +66,7 @@ const App: React.FC = () => {
     setPreSelectedServiceId(null); 
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Clear view param from URL without refreshing
+    // Cleanup URL
     const url = new URL(window.location.href);
     url.searchParams.delete('view');
     window.history.replaceState({}, '', url);
@@ -124,7 +124,7 @@ const App: React.FC = () => {
     );
   }
 
-  // Handle direct staff-only rendering
+  // View specific bypass
   if (activeView === 'staff-dashboard' && currentStaff) {
     return <StaffDashboard user={currentStaff} onLogout={handleStaffLogout} />;
   }
@@ -167,6 +167,8 @@ const App: React.FC = () => {
             onBack={() => (currentUser ? handleNavigate('dashboard') : handleNavigate('home'))} 
             initialServiceId={preSelectedServiceId}
           />
+        ) : activeView === 'ai-studio' ? (
+          <AIStudio onBack={() => handleNavigate('home')} onOrder={handleOrderService} />
         ) : (
           <>
             <Hero onNavigate={handleNavigate} />
@@ -218,12 +220,12 @@ const App: React.FC = () => {
                   >
                     Start Consultation <ArrowUpRight className="w-5 h-5" />
                   </a>
-                  <a 
-                    href="#services" 
-                    className="bg-white/5 text-white hover:bg-white/10 px-12 py-6 rounded-[2rem] border border-white/10 font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-md"
+                  <button 
+                    onClick={() => handleNavigate('ai-studio')} 
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-12 py-6 rounded-[2rem] font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-2xl shadow-indigo-900/40"
                   >
-                    Browse All Tiles
-                  </a>
+                    Marvetti AI Studio <ArrowUpRight className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
             </section>
