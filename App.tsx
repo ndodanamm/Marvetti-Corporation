@@ -14,35 +14,90 @@ import FAQPage from './components/FAQPage';
 import AffiliatePage from './components/AffiliatePage';
 import OrderQuoteForm from './components/OrderQuoteForm';
 import ClientDashboard from './components/ClientDashboard';
+import ClientAuth from './components/ClientAuth';
+import StaffDashboard from './components/StaffDashboard';
+import StaffAuth from './components/StaffAuth';
 import Footer from './components/Footer';
 import ServicePage from './components/ServicePage';
 import HowItWorksPage from './components/HowItWorksPage';
 import PortfolioPage from './components/PortfolioPage';
 import { SERVICES_DATA } from './constants';
+import { User, StaffUser } from './types';
 import { MessageCircle, ArrowUpRight } from 'lucide-react';
 
-type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | 'dashboard' | string;
+type ViewState = 'home' | 'how-it-works' | 'portfolio' | 'faq' | 'affiliate' | 'order-quote' | 'dashboard' | 'auth' | 'staff-dashboard' | 'staff-auth' | string;
 
 const App: React.FC = () => {
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [activeView, setActiveView] = useState<ViewState>('home');
   const [preSelectedServiceId, setPreSelectedServiceId] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentStaff, setCurrentStaff] = useState<StaffUser | null>(null);
 
   useEffect(() => {
+    // Check sessions
+    const savedUser = localStorage.getItem('marvetti_user');
+    if (savedUser) setCurrentUser(JSON.parse(savedUser));
+
+    const savedStaff = localStorage.getItem('marvetti_staff');
+    if (savedStaff) setCurrentStaff(JSON.parse(savedStaff));
+
+    // Handle deep-linking via query params (e.g. ?view=staff)
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get('view');
+    if (viewParam === 'staff') {
+      setActiveView(savedStaff ? 'staff-dashboard' : 'staff-auth');
+    } else if (viewParam) {
+      setActiveView(viewParam);
+    }
+
     const timer = setTimeout(() => setIsAppLoading(false), 2200);
     return () => clearTimeout(timer);
   }, []);
 
   const handleNavigate = (view: ViewState) => {
-    setActiveView(view);
+    if (view === 'dashboard' && !currentUser) {
+      setActiveView('auth');
+    } else if (view === 'staff-dashboard' && !currentStaff) {
+      setActiveView('staff-auth');
+    } else {
+      setActiveView(view);
+    }
     setPreSelectedServiceId(null); 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Clear view param from URL without refreshing
+    const url = new URL(window.location.href);
+    url.searchParams.delete('view');
+    window.history.replaceState({}, '', url);
   };
 
   const handleOrderService = (serviceId: string) => {
     setPreSelectedServiceId(serviceId);
     setActiveView('order-quote');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleAuthSuccess = (user: User) => {
+    setCurrentUser(user);
+    setActiveView('dashboard');
+  };
+
+  const handleStaffAuthSuccess = (staff: StaffUser) => {
+    setCurrentStaff(staff);
+    setActiveView('staff-dashboard');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('marvetti_user');
+    setCurrentUser(null);
+    setActiveView('home');
+  };
+
+  const handleStaffLogout = () => {
+    localStorage.removeItem('marvetti_staff');
+    setCurrentStaff(null);
+    setActiveView('home');
   };
 
   if (isAppLoading) {
@@ -69,11 +124,19 @@ const App: React.FC = () => {
     );
   }
 
+  // Handle direct staff-only rendering
+  if (activeView === 'staff-dashboard' && currentStaff) {
+    return <StaffDashboard user={currentStaff} onLogout={handleStaffLogout} />;
+  }
+  if (activeView === 'staff-auth') {
+    return <StaffAuth onAuthSuccess={handleStaffAuthSuccess} onBack={() => handleNavigate('home')} />;
+  }
+
   const activeService = SERVICES_DATA.find(s => s.id === activeView);
 
   return (
     <div className="min-h-screen flex flex-col scroll-smooth animate-in fade-in duration-700">
-      <Header onNavigate={handleNavigate} currentView={activeView} />
+      <Header onNavigate={handleNavigate} currentView={activeView} isAuthenticated={!!currentUser} />
       
       <main className="flex-grow">
         {activeService ? (
@@ -90,16 +153,23 @@ const App: React.FC = () => {
           <FAQPage onBack={() => handleNavigate('home')} />
         ) : activeView === 'affiliate' ? (
           <AffiliatePage onBack={() => handleNavigate('home')} />
+        ) : activeView === 'auth' ? (
+          <ClientAuth onAuthSuccess={handleAuthSuccess} onBack={() => handleNavigate('home')} />
         ) : activeView === 'dashboard' ? (
-          <ClientDashboard onBack={() => handleNavigate('home')} />
+          <ClientDashboard 
+            user={currentUser!} 
+            onBack={() => handleNavigate('home')} 
+            onLogout={handleLogout}
+            onOrderService={handleOrderService}
+          />
         ) : activeView === 'order-quote' ? (
           <OrderQuoteForm 
-            onBack={() => handleNavigate('home')} 
+            onBack={() => (currentUser ? handleNavigate('dashboard') : handleNavigate('home'))} 
             initialServiceId={preSelectedServiceId}
           />
         ) : (
           <>
-            <Hero />
+            <Hero onNavigate={handleNavigate} />
             
             <section className="bg-slate-950 py-16 border-y border-white/5 relative overflow-hidden">
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_50%,#4f46e5,transparent)]"></div>
@@ -182,6 +252,14 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div id="policies" className="font-inter pb-10 text-[9px] font-black leading-relaxed opacity-20 text-center uppercase tracking-[0.3em] max-w-4xl mx-auto text-white">
             POPIA Disclaimer: Marvetti Corp respects your privacy. By engaging with our platform, you consent to our data collection protocols in line with South African legislation (POPIA). All storage is encrypted and strictly used for project facilitation and professional communications.
+          </div>
+          <div className="pb-10 flex justify-center">
+            <button 
+              onClick={() => handleNavigate('staff-auth')}
+              className="text-[8px] font-black text-slate-700 uppercase tracking-widest hover:text-indigo-500 transition-colors"
+            >
+              Staff Internal Portal
+            </button>
           </div>
         </div>
       </section>

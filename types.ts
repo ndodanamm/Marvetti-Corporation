@@ -77,3 +77,29 @@ export interface DashboardInvoice {
   amount: string;
   status: 'Paid' | 'Pending' | 'Overdue';
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  businessName: string;
+  tier: 'Standard' | 'Premium' | 'Enterprise';
+  createdAt: string;
+}
+
+export interface StaffUser {
+  id: string;
+  name: string;
+  role: 'Admin' | 'Strategist' | 'Engineer';
+  email: string;
+  accessLevel: number;
+}
+
+export interface LeadRecord {
+  id: string;
+  name: string;
+  email: string;
+  service: string;
+  status: 'New' | 'Contacted' | 'Proposal' | 'Closed';
+  timestamp: string;
+}

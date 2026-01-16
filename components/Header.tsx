@@ -6,9 +6,10 @@ import { SERVICES_DATA } from '../constants';
 interface HeaderProps {
   onNavigate: (view: any) => void;
   currentView: string;
+  isAuthenticated?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
+const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticated }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -117,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
                    currentView === 'dashboard' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
                 }`}
               >
-                <LayoutDashboard className="w-4 h-4" /> Portal
+                <LayoutDashboard className="w-4 h-4" /> {isAuthenticated ? 'Nexus' : 'Portal'}
               </button>
               <button 
                 onClick={() => onNavigate('order-quote')}
@@ -164,7 +165,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
             onClick={() => { onNavigate('dashboard'); setMobileMenuOpen(false); }}
             className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
           >
-            <LayoutDashboard className="w-5 h-5" /> Client Portal
+            <LayoutDashboard className="w-5 h-5" /> {isAuthenticated ? 'Your Nexus' : 'Client Portal'}
           </button>
 
           <button 

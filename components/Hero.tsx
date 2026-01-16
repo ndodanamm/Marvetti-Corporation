@@ -1,8 +1,12 @@
 
 import React from 'react';
-import { ArrowRight, MessageCircle, Share2, Database, Layout, Cloud, ShieldCheck } from 'lucide-react';
+import { ArrowRight, MessageCircle, Share2, Database, Layout, Cloud, ShieldCheck, ShieldAlert } from 'lucide-react';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onNavigate?: (view: string) => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-slate-950">
       {/* Dynamic Workflow Background Layer */}
@@ -16,9 +20,21 @@ const Hero: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-10">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-indigo-400 text-xs font-black uppercase tracking-[0.2em] backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span>
-              Marvetti Corp // Digital First
+            <div className="flex flex-wrap gap-3">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-indigo-400 text-xs font-black uppercase tracking-[0.2em] backdrop-blur-md">
+                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span>
+                Marvetti Corp // Digital First
+              </div>
+              
+              {/* DEV ACCESS BUTTON */}
+              {onNavigate && (
+                <button 
+                  onClick={() => onNavigate('staff-auth')}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-500 text-[10px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all animate-pulse"
+                >
+                  <ShieldAlert className="w-3 h-3" /> Internal Staff Entrance
+                </button>
+              )}
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-black text-white leading-[0.9] tracking-tighter">
