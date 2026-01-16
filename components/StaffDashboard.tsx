@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-// Added missing Palette, ArrowLeft, and User as UserIcon imports from lucide-react
 import { 
   Users, 
   BarChart3, 
@@ -212,6 +211,17 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Sync with localStorage for any "pushed" orders
+    const storedLeadsRaw = localStorage.getItem('marvetti_leads');
+    if (storedLeadsRaw) {
+      const storedLeads: LeadRecord[] = JSON.parse(storedLeadsRaw);
+      // Merge unique leads by ID
+      const merged = [...storedLeads, ...MOCK_LEADS].filter(
+        (v, i, a) => a.findIndex(t => t.id === v.id) === i
+      );
+      setLeads(merged);
+    }
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab]);
 
@@ -564,7 +574,7 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
           </div>
         )}
 
-        {/* Lead Management Tab (Minimal update for aesthetic parity) */}
+        {/* Lead Management Tab */}
         {activeTab === 'leads' && (
           <div className="space-y-10 animate-in fade-in duration-700">
              <div className="grid md:grid-cols-3 gap-8">

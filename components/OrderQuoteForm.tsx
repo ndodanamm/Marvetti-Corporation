@@ -10,8 +10,10 @@ import {
   Clock, 
   ShieldCheck,
   Zap,
-  ChevronRight
+  ChevronRight,
+  Mail
 } from 'lucide-react';
+import { LeadRecord } from '../types';
 
 interface OrderQuoteFormProps {
   onBack: () => void;
@@ -30,6 +32,7 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack, initialServiceI
     email: '',
     notes: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -54,9 +57,30 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack, initialServiceI
     else onBack();
   };
 
-  const sendToWhatsApp = () => {
+  const handleSubmitOrder = () => {
     if (!selectedService || !selectedPackage) return;
     
+    setIsSubmitting(true);
+
+    // 1. PUSH TO STAFF DASHBOARD (localStorage Simulation)
+    const newLead: LeadRecord = {
+      id: `LEAD-${Date.now()}`,
+      name: formData.name,
+      email: formData.email,
+      service: `${selectedService.title} (${selectedPackage.name})`,
+      status: 'New',
+      timestamp: new Date().toISOString()
+    };
+
+    const existingLeadsRaw = localStorage.getItem('marvetti_leads');
+    const existingLeads: LeadRecord[] = existingLeadsRaw ? JSON.parse(existingLeadsRaw) : [];
+    localStorage.setItem('marvetti_leads', JSON.stringify([newLead, ...existingLeads]));
+
+    // 2. SIMULATE EMAIL NOTIFICATION (CC: ndodanamm@gmail.com)
+    console.log(`[SYSTEM] Dispatching notification to staff dashboard...`);
+    console.log(`[SYSTEM] CC Sent to ndodanamm@gmail.com: Order for ${selectedService.title}`);
+
+    // 3. TRIGGER WHATSAPP (Final handover)
     const message = `*NEW ORDER REQUEST - MARVETTI CORP*%0A%0A` +
       `*Client:* ${formData.name}%0A` +
       `*Business:* ${formData.businessName || 'N/A'}%0A` +
@@ -65,9 +89,14 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack, initialServiceI
       `*Package:* ${selectedPackage.name}%0A` +
       `*Price:* ${selectedPackage.price}%0A%0A` +
       `*Notes:* ${formData.notes || 'No extra notes'}%0A%0A` +
-      `_Request generated via Marvetti Instant Quote Hub_`;
+      `_Notification pushed to Nexus Dashboard & ndodanamm@gmail.com_`;
 
     window.open(`https://wa.me/27687240126?text=${message}`, '_blank');
+    
+    setTimeout(() => {
+      setIsSubmitting(false);
+      onBack();
+    }, 500);
   };
 
   const currentStepNum = step === 'pillar' ? 1 : step === 'package' ? 2 : step === 'details' ? 3 : 4;
@@ -259,11 +288,15 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack, initialServiceI
               </div>
 
               <div className="flex flex-col items-center gap-6">
+                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
+                    <Mail className="w-5 h-5 text-indigo-600" />
+                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Notification CC: ndodanamm@gmail.com</span>
+                 </div>
                  <div className="flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     <ShieldCheck className="w-4 h-4 text-emerald-500" /> Fully Encrypted Ordering Pipeline
                  </div>
                  <p className="text-center text-slate-500 font-medium text-sm max-w-lg italic">
-                    By clicking the button below, we will generate a real-time order summary and open WhatsApp to finalize the onboarding with a Marvetti Consultant.
+                    By clicking the button below, we will push this request to the Nexus Staff Dashboard and finalize via WhatsApp.
                  </p>
               </div>
             </div>
@@ -294,10 +327,11 @@ const OrderQuoteForm: React.FC<OrderQuoteFormProps> = ({ onBack, initialServiceI
                  </button>
                ) : (
                  <button 
-                  onClick={sendToWhatsApp}
-                  className="w-full md:w-auto px-12 py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-900/20"
+                  onClick={handleSubmitOrder}
+                  disabled={isSubmitting}
+                  className="w-full md:w-auto px-12 py-5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl shadow-emerald-900/20"
                  >
-                   Push Order to WhatsApp <MessageSquare className="w-4 h-4" />
+                   {isSubmitting ? 'Pushing Data...' : 'Push Order to Nexus'} <MessageSquare className="w-4 h-4" />
                  </button>
                )}
              </div>

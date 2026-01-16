@@ -3,7 +3,12 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { SERVICES_DATA } from "../constants";
 
 export const getServiceRecommendation = async (userInput: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    throw new Error("Architecture link unavailable: API Key not configured.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
   
   const schema = {
     type: Type.OBJECT,
@@ -62,10 +67,10 @@ export const getServiceRecommendation = async (userInput: string) => {
     });
 
     const text = response.text;
-    if (!text) throw new Error("Empty AI response");
+    if (!text) throw new Error("Empty intelligence response from Architect Core.");
     return JSON.parse(text);
   } catch (error) {
-    console.error("AI Error:", error);
+    console.error("AI Recommendation Error:", error);
     throw error;
   }
 };

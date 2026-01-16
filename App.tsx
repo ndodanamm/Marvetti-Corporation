@@ -36,17 +36,29 @@ const App: React.FC = () => {
   const [currentStaff, setCurrentStaff] = useState<StaffUser | null>(null);
 
   useEffect(() => {
-    // Robust hydration sequence
-    const savedUser = localStorage.getItem('marvetti_user');
-    if (savedUser) setCurrentUser(JSON.parse(savedUser));
+    // Robust hydration sequence with error handling
+    try {
+      const savedUser = localStorage.getItem('marvetti_user');
+      if (savedUser && savedUser !== 'undefined') {
+        setCurrentUser(JSON.parse(savedUser));
+      }
 
-    const savedStaff = localStorage.getItem('marvetti_staff');
-    if (savedStaff) setCurrentStaff(JSON.parse(savedStaff));
+      const savedStaff = localStorage.getItem('marvetti_staff');
+      if (savedStaff && savedStaff !== 'undefined') {
+        setCurrentStaff(JSON.parse(savedStaff));
+      }
+    } catch (error) {
+      console.error("Critical: Marvetti Nexus Hydration Error:", error);
+      // Clear potentially corrupted storage
+      localStorage.removeItem('marvetti_user');
+      localStorage.removeItem('marvetti_staff');
+    }
 
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
     if (viewParam === 'staff') {
-      setActiveView(savedStaff ? 'staff-dashboard' : 'staff-auth');
+      const staffData = localStorage.getItem('marvetti_staff');
+      setActiveView(staffData ? 'staff-dashboard' : 'staff-auth');
     } else if (viewParam) {
       setActiveView(viewParam);
     }
@@ -208,9 +220,9 @@ const App: React.FC = () => {
                   Start Your Journey with <br />
                   <span className="text-indigo-500">MARVETTI CORP</span>
                 </h2>
-                <p className="text-slate-400 text-xl mb-16 max-w-2xl mx-auto font-medium">
+                <h3 className="text-slate-400 text-xl mb-16 max-w-2xl mx-auto font-medium">
                   Join hundreds of organizations who have digitized their core functions through the Marvetti framework. Remote-first. Solution-driven.
-                </p>
+                </h3>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                   <a 
                     href="https://wa.me/27687240126"
