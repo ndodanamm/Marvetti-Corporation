@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown, Zap, LayoutDashboard, Sparkles } from 'lucide-react';
-import { SERVICES_DATA } from '../constants';
+import { STAGES_DATA } from '../constants';
 
 interface HeaderProps {
   onNavigate: (view: any) => void;
@@ -12,7 +12,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticated }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [stagesOpen, setStagesOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setServicesOpen(false);
+        setStagesOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -46,102 +46,87 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
               onClick={() => onNavigate('home')}
               className={`text-2xl font-black tracking-tighter uppercase transition-colors duration-300 ${isScrolled ? 'text-slate-950' : 'text-white'}`}
             >
-              MARVETTI <span className="text-indigo-500">CORP</span>
+              MARVETTI <span className="text-brand-500">CORPORATION</span>
             </button>
           </div>
 
           <nav className="hidden md:flex items-center gap-10">
             <div className="relative" ref={dropdownRef}>
               <button
-                onMouseEnter={() => setServicesOpen(true)}
-                onClick={() => setServicesOpen(!servicesOpen)}
-                className={`flex items-center gap-1 text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
+                onMouseEnter={() => setStagesOpen(true)}
+                onClick={() => setStagesOpen(!stagesOpen)}
+                className={`flex items-center gap-1 text-xs font-black uppercase tracking-widest transition-colors hover:text-brand-500 ${
                   isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
                 }`}
               >
-                Services <ChevronDown className={`w-3 h-3 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />
+                Stages 1-12 <ChevronDown className={`w-3 h-3 transition-transform ${stagesOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              {servicesOpen && (
+              {stagesOpen && (
                 <div 
-                  onMouseLeave={() => setServicesOpen(false)}
-                  className="absolute top-full left-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden py-4 animate-in fade-in slide-in-from-top-2 duration-200"
+                  onMouseLeave={() => setStagesOpen(false)}
+                  className="absolute top-full left-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden py-4 animate-in fade-in slide-in-from-top-2 duration-200"
                 >
                   <div className="px-6 py-2 mb-2 border-b border-slate-50">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500">Core Pillars</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-500">Master Sequence</span>
                   </div>
-                  {SERVICES_DATA.map((service) => (
-                    <button
-                      key={service.id}
-                      onClick={() => {
-                        onNavigate(service.id);
-                        setServicesOpen(false);
-                      }}
-                      className={`w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors group flex items-center gap-3 ${currentView === service.id ? 'bg-slate-50' : ''}`}
-                    >
-                      <div className={`w-2 h-2 rounded-full ${service.color} opacity-40 group-hover:opacity-100 transition-opacity`}></div>
-                      <div>
-                        <div className="text-[11px] font-black text-slate-900 uppercase tracking-wider">{service.title}</div>
-                        <div className="text-[9px] text-slate-400 font-medium line-clamp-1">{service.shortDescription}</div>
-                      </div>
-                    </button>
-                  ))}
+                  <div className="max-h-[400px] overflow-y-auto">
+                    {STAGES_DATA.map((stage) => (
+                      <button
+                        key={stage.id}
+                        onClick={() => {
+                          onNavigate(stage.id);
+                          setStagesOpen(false);
+                        }}
+                        className={`w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors group flex items-center gap-3 ${currentView === stage.id ? 'bg-slate-50' : ''}`}
+                      >
+                        <div className="text-[10px] font-black text-slate-300 group-hover:text-brand-500 transition-colors">{stage.stageNumber}</div>
+                        <div>
+                          <div className="text-[11px] font-black text-slate-900 uppercase tracking-wider">{stage.title}</div>
+                          <div className="text-[9px] text-slate-400 font-medium line-clamp-1">{stage.shortDescription}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
 
             <button
               onClick={() => onNavigate('ai-studio')}
-              className={`flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
-                currentView === 'ai-studio' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
+              className={`flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-colors hover:text-brand-500 ${
+                currentView === 'ai-studio' ? 'text-brand-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5" /> AI Studio
+              <Sparkles className="w-3.5 h-3.5" /> Lab
             </button>
 
             <button
               onClick={() => onNavigate('portfolio')}
-              className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
-                currentView === 'portfolio' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
+              className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-brand-500 ${
+                currentView === 'portfolio' ? 'text-brand-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
               }`}
             >
-              Portfolio
+              Results
             </button>
 
-            <button
-              onClick={() => onNavigate('how-it-works')}
-              className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 ${
-                currentView === 'how-it-works' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
-              }`}
-            >
-              How It Works
-            </button>
-            
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => onNavigate('dashboard')}
-                className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-indigo-500 flex items-center gap-2 ${
-                   currentView === 'dashboard' ? 'text-indigo-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
+                className={`text-xs font-black uppercase tracking-widest transition-colors hover:text-brand-500 flex items-center gap-2 ${
+                   currentView === 'dashboard' ? 'text-brand-600' : isScrolled ? 'text-slate-600' : 'text-white/80 hover:text-white'
                 }`}
               >
-                <LayoutDashboard className="w-4 h-4" /> {isAuthenticated ? 'Nexus' : 'Portal'}
+                <LayoutDashboard className="w-4 h-4" /> {isAuthenticated ? 'Nexus' : 'Sign In'}
               </button>
               <button 
                 onClick={() => onNavigate('order-quote')}
                 className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-lg ${
-                  isScrolled ? 'bg-slate-100 text-slate-900' : 'bg-white/10 text-white backdrop-blur-md'
+                  isScrolled ? 'bg-slate-900 text-white' : 'bg-white text-slate-950'
                 }`}
               >
-                <Zap className="w-3.5 h-3.5 text-indigo-500" /> Instant Quote
+                <Zap className="w-3.5 h-3.5 text-brand-500" /> Start Project
               </button>
-              <a 
-                href="https://wa.me/27687240126"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-600/20"
-              >
-                Consult Now
-              </a>
             </div>
           </nav>
 
@@ -166,61 +151,27 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, isAuthenticate
           >
             Home
           </button>
-
-          <button 
-            onClick={() => { onNavigate('ai-studio'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
-          >
-            <Sparkles className="w-5 h-5" /> AI Studio
-          </button>
-
           <button 
             onClick={() => { onNavigate('dashboard'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
+            className="text-lg font-black text-brand-600 text-left border-b border-slate-50 pb-4"
           >
-            <LayoutDashboard className="w-5 h-5" /> {isAuthenticated ? 'Your Nexus' : 'Client Portal'}
+            Nexus Dashboard
           </button>
-
-          <button 
-            onClick={() => { onNavigate('order-quote'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-indigo-600 text-left border-b border-slate-50 pb-4 flex items-center gap-3"
-          >
-            <Zap className="w-5 h-5" /> Instant Quote Hub
-          </button>
-
-          <button 
-            onClick={() => { onNavigate('portfolio'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
-          >
-            Portfolio
-          </button>
-
-          <button 
-            onClick={() => { onNavigate('how-it-works'); setMobileMenuOpen(false); }}
-            className="text-lg font-black text-slate-900 text-left border-b border-slate-50 pb-4"
-          >
-            How It Works
-          </button>
-          
           <div className="flex flex-col gap-3">
-            <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Our Services</span>
-            {SERVICES_DATA.map((service) => (
+            <span className="text-[10px] font-black text-brand-500 uppercase tracking-widest">Select Stage</span>
+            {STAGES_DATA.map((stage) => (
               <button
-                key={service.id}
+                key={stage.id}
                 onClick={() => {
-                  onNavigate(service.id);
+                  onNavigate(stage.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`text-sm font-bold pl-4 py-1 text-left ${currentView === service.id ? 'text-indigo-600' : 'text-slate-600'}`}
+                className={`text-sm font-bold pl-4 py-1 text-left ${currentView === stage.id ? 'text-brand-600' : 'text-slate-600'}`}
               >
-                {service.title}
+                Stage {stage.stageNumber}: {stage.title}
               </button>
             ))}
           </div>
-
-          <a href="https://wa.me/27687240126" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 text-white py-4 rounded-2xl font-black text-center uppercase tracking-widest text-xs">
-            Chat to Consultant
-          </a>
         </div>
       )}
     </header>

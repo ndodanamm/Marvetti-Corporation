@@ -27,7 +27,8 @@ const ClientAuth: React.FC<ClientAuthProps> = ({ onAuthSuccess, onBack }) => {
       email: formData.email,
       businessName: formData.businessName || 'Global Enterprise',
       tier: 'Standard',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      completedStages: []
     };
 
     localStorage.setItem('marvetti_user', JSON.stringify(mockUser));

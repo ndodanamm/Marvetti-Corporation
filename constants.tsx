@@ -6,297 +6,302 @@ import {
   Palette, 
   ShoppingCart, 
   Megaphone, 
-  Brain, 
-  GraduationCap, 
-  Headset,
   Zap,
   Search,
   ShieldCheck,
   FileText,
-  MousePointer2
+  Building2,
+  FileBadge,
+  Globe,
+  Users,
+  Settings,
+  Headset,
+  Target,
+  BarChart,
+  Database,
+  HeartHandshake
 } from 'lucide-react';
-import { ServiceItem, Project, FAQItem, StandaloneService, DashboardProject, DashboardInvoice, LeadRecord } from './types';
+import { ServiceStage, ServiceItem, Project } from './types';
 
-export const SERVICES_DATA: ServiceItem[] = [
+export const STAGES_DATA: ServiceStage[] = [
   {
-    id: '8',
-    category: 'cx',
-    title: 'Customer Service & Client Relations',
-    shortDescription: 'Call centre services (inbound & outbound), Customer experience optimization.',
-    longDescription: 'Strategic customer engagement solutions including multi-channel call centre services. We handle inbound queries and outbound relations to scale your client satisfaction and retention.',
-    tools: ['Zendesk', 'Cloud PBX', 'HubSpot', 'Custom Bots'],
-    startingPrice: 'R3,000',
-    icon: <Headset className="w-6 h-6" />,
-    color: 'bg-slate-700',
-    packages: [
-      { name: 'Inbound Support Desk', description: 'Dedicated remote support team for inbound queries and ticketing management.', price: 'R3,000' },
-      { name: 'Outbound Client Relations', description: 'Active outreach, lead follow-ups, and outbound client relationship management.', price: 'R5,000' },
-      { name: 'Full Hybrid Call Centre', description: 'Complete inbound/outbound setup with AI automation and 24/7 coverage.', price: 'R12,500' }
+    id: 'stage-1',
+    stageNumber: 1,
+    title: 'CIPC Company Registration',
+    shortDescription: 'Official company formation and registration documents.',
+    longDescription: 'Full CIPC registration including tax number and incorporation documents. 70% AI drafting of MoI and 30% human verification of ID documents.',
+    priceDisplay: 'R495',
+    fixedPrice: 495,
+    icon: <Building2 className="w-6 h-6" />,
+    color: 'bg-brand-500',
+    questions: [
+      { id: 'name1', label: 'Company Name Preference 1', type: 'text', required: true },
+      { id: 'name2', label: 'Company Name Preference 2', type: 'text', required: true },
+      { id: 'directors', label: 'Number of Directors', type: 'select', options: ['1', '2', '3', '4+'], required: true }
     ]
   },
   {
-    id: '1',
-    category: 'admin',
-    title: 'Business Admin & Virtual Support',
-    shortDescription: 'Organize workflows, documents, remote admin support.',
-    longDescription: 'High-touch administrative support designed to offload operational weight. We manage your back-office so you can focus on front-line growth.',
-    tools: ['Google Workspace', 'Notion', 'Slack', 'Asana'],
-    startingPrice: 'R800',
-    icon: <Briefcase className="w-6 h-6" />,
-    color: 'bg-blue-600',
-    packages: [
-      { name: 'Basic Task Setup', description: 'Single task/project — scheduling, document organization', price: 'R800' },
-      { name: 'Workflow Optimization Pack', description: 'Multi-task integration, recurring task automation', price: 'R1,500' },
-      { name: 'Full Admin Support Setup', description: 'Complete workflow framework + remote admin', price: 'R2,500' }
-    ]
-  },
-  {
-    id: '2',
-    category: 'cloud',
-    title: 'Cloud Technology & Automation',
-    shortDescription: 'Cloud setup, task automation, AI integration.',
-    longDescription: 'Leverage modern cloud stacks and AI to eliminate manual data entry and repetitive workflows.',
-    tools: ['AWS', 'Zapier', 'Make.com', 'Azure'],
-    startingPrice: 'R1,200',
-    icon: <Cloud className="w-6 h-6" />,
-    color: 'bg-indigo-600',
-    packages: [
-      { name: 'Cloud Starter', description: 'Basic cloud migration and storage setup', price: 'R1,200' },
-      { name: 'Automation Standard', description: 'Advanced task automation and API integrations', price: 'R2,000' },
-      { name: 'Enterprise Flow', description: 'Full architecture overhaul and AI integration', price: 'R3,500' }
-    ]
-  },
-  {
-    id: '3',
-    category: 'branding',
-    title: 'Branding & Online Identity',
-    shortDescription: 'Logos, templates, websites, hosting, domain.',
-    longDescription: 'Establish a cohesive digital identity that resonates with your target audience across all touchpoints.',
-    tools: ['Figma', 'Adobe CC', 'WordPress', 'React'],
-    startingPrice: 'R1,000',
+    id: 'stage-2',
+    stageNumber: 2,
+    title: 'Visual Identity & Logo',
+    shortDescription: 'AI-assisted concepts with human design polish.',
+    longDescription: 'High-fidelity branding assets. Phase 1 uses AI for rapid concepting (max 3 regens) followed by human refinement.',
+    priceDisplay: 'R70 - R350',
+    fromPrice: 70,
     icon: <Palette className="w-6 h-6" />,
-    color: 'bg-rose-600',
-    packages: [
-      { name: 'Identity Basic', description: 'Logo design and basic brand guide', price: 'R1,000' },
-      { name: 'Business Identity', description: 'Full branding kit + business website setup', price: 'R3,000' },
-      { name: 'Premium Online Hub', description: 'E-Commerce ready site + full custom identity', price: 'R4,500' }
+    color: 'bg-brand-600',
+    questions: [
+      { id: 'style', label: 'Logo Style', type: 'select', options: ['Minimalist', 'Corporate', 'Playful', 'Vintage'], required: true },
+      { id: 'colors', label: 'Primary Brand Colors', type: 'text', required: true },
+      { id: 'slogan', label: 'Slogan (if any)', type: 'text', required: false }
     ]
   },
   {
-    id: '4',
-    category: 'ecommerce',
-    title: 'E-Commerce & Backend Management',
-    shortDescription: 'Product setup, payment gateways, inventory automation.',
-    longDescription: 'Scalable commerce solutions that bridge the gap between inventory and the checkout button.',
-    tools: ['Shopify', 'WooCommerce', 'Stripe', 'PayFast'],
-    startingPrice: 'R5,000',
-    icon: <ShoppingCart className="w-6 h-6" />,
-    color: 'bg-emerald-600',
-    packages: [
-      { name: 'Store Starter', description: 'Core store setup and single gateway config', price: 'R5,000' },
-      { name: 'Merchant Pro', description: 'Inventory automation and multi-gateways', price: 'R8,000' },
-      { name: 'Omnichannel Enterprise', description: 'Full backend ecosystem management', price: 'R10,000' }
+    id: 'stage-3',
+    stageNumber: 3,
+    title: 'Business Profile',
+    shortDescription: 'Professional corporate profile for tenders.',
+    longDescription: 'Comprehensive document detailing operations and vision. AI structures the content; human strategists verify industry alignment.',
+    priceDisplay: 'R400 - R650',
+    fromPrice: 400,
+    icon: <FileBadge className="w-6 h-6" />,
+    color: 'bg-brand-700',
+    questions: [
+      { id: 'mission', label: 'Core Mission Statement', type: 'textarea', required: true },
+      { id: 'experience', label: 'Years of Industry Experience', type: 'text', required: true }
     ]
   },
   {
-    id: '5',
-    category: 'marketing',
-    title: 'Digital Marketing (SMM & SEM)',
-    shortDescription: 'Social media & search engine campaigns.',
-    longDescription: 'Strategic traffic generation focusing on high conversion rates and ROI-driven ad spend.',
-    tools: ['Meta Ads', 'Google Ads', 'Mailchimp', 'Buffer'],
-    startingPrice: 'R1,200',
+    id: 'stage-4',
+    stageNumber: 4,
+    title: 'Business Plan',
+    shortDescription: 'Structured planning for funding and growth.',
+    longDescription: 'Detailed financial projections and market analysis generated via neural synthesis and human audit.',
+    priceDisplay: 'R650 - R2,500',
+    fromPrice: 650,
+    icon: <FileText className="w-6 h-6" />,
+    color: 'bg-slate-800',
+    questions: [
+      { id: 'funding', label: 'Target Funding Amount', type: 'text', required: true },
+      { id: 'model', label: 'Revenue Model', type: 'select', options: ['Product', 'Service', 'SaaS', 'Hybrid'], required: true }
+    ]
+  },
+  {
+    id: 'stage-5',
+    stageNumber: 5,
+    title: 'Industry Compliance',
+    shortDescription: 'Sector-specific regulatory registrations.',
+    longDescription: 'UIF, COIDA, Letter of Good Standing. AI handles form population; human agents manage submission.',
+    priceDisplay: 'From R1,350',
+    fromPrice: 1350,
+    icon: <ShieldCheck className="w-6 h-6" />,
+    color: 'bg-brand-600',
+    questions: [
+      { id: 'sector', label: 'Industry Sector', type: 'text', required: true },
+      { id: 'employees', label: 'Number of Employees', type: 'text', required: true }
+    ]
+  },
+  {
+    id: 'stage-6',
+    stageNumber: 6,
+    title: 'Websites & Domains',
+    shortDescription: 'Digital real estate and online presence.',
+    longDescription: 'Custom domains and optimized site architectures. AI generates the boilerplate; human engineers finalize UI/UX.',
+    priceDisplay: 'R1,450 - R15,500',
+    fromPrice: 1450,
+    icon: <Globe className="w-6 h-6" />,
+    color: 'bg-brand-500',
+    questions: [
+      { id: 'domain', label: 'Desired Domain Name', type: 'text', required: true },
+      { id: 'site_type', label: 'Website Type', type: 'select', options: ['One Page', 'Business Hub', 'E-Commerce Store'], required: true }
+    ]
+  },
+  {
+    id: 'stage-7',
+    stageNumber: 7,
+    title: 'Social Media Setup',
+    shortDescription: 'Optimized channel creation and branding.',
+    longDescription: 'Professional setup of LinkedIn, Instagram, and Facebook infrastructure.',
+    priceDisplay: 'From R350/task',
+    fromPrice: 350,
+    icon: <Users className="w-6 h-6" />,
+    color: 'bg-brand-600',
+    questions: [
+      { id: 'platforms', label: 'Platforms Needed', type: 'text', required: true }
+    ]
+  },
+  {
+    id: 'stage-8',
+    stageNumber: 8,
+    title: 'Search Engine Setup',
+    shortDescription: 'Google Business and SEO indexing.',
+    longDescription: 'Indexing and local SEO setup for maximum visibility via automated crawlers and human verification.',
+    priceDisplay: 'From R350/task',
+    fromPrice: 350,
+    icon: <Search className="w-6 h-6" />,
+    color: 'bg-brand-700',
+    questions: [
+      { id: 'location', label: 'Primary Business Location', type: 'text', required: true }
+    ]
+  },
+  {
+    id: 'stage-9',
+    stageNumber: 9,
+    title: 'Digital Campaign Setup',
+    shortDescription: 'Conversion-focused ad infrastructure.',
+    longDescription: 'Meta and Google Ads setup with pixel tracking. AI targets; humans optimize creative.',
+    priceDisplay: 'From R350/task',
+    fromPrice: 350,
     icon: <Megaphone className="w-6 h-6" />,
-    color: 'bg-amber-600',
-    packages: [
-      { name: 'Basic Campaign', description: 'Single platform management and ad setup', price: 'R1,200' },
-      { name: 'Growth Suite', description: 'Multi-channel ads + basic content creation', price: 'R2,500' },
-      { name: 'Dominance Plan', description: 'Full-service funnel and retention strategy', price: 'R4,500' }
+    color: 'bg-slate-800',
+    questions: [
+      { id: 'goal', label: 'Primary Campaign Goal', type: 'select', options: ['Leads', 'Sales', 'Traffic', 'Awareness'], required: true }
     ]
   },
   {
-    id: '6',
-    category: 'ai',
-    title: 'AI & Data Analytics',
-    shortDescription: 'Business data analysis, dashboards, insights.',
-    longDescription: 'Turn raw data into actionable business intelligence through custom reporting and predictive modeling.',
-    tools: ['PowerBI', 'Tableau', 'Python', 'Excel Pro'],
-    startingPrice: 'R1,800',
-    icon: <Brain className="w-6 h-6" />,
-    color: 'bg-purple-600',
-    packages: [
-      { name: 'Insight Basic', description: 'Data cleanup and core metric reporting', price: 'R1,800' },
-      { name: 'Dashboard Standard', description: 'Interactive real-time visual dashboards', price: 'R2,500' },
-      { name: 'Predictive Pro', description: 'Advanced AI modeling and forecasting', price: 'R3,000' }
+    id: 'stage-10',
+    stageNumber: 10,
+    title: 'CRM / Automation',
+    shortDescription: 'Automated workflows and client pipelines.',
+    longDescription: 'HubSpot or custom nodes. 70% of code generated by AI; 30% debugged by human engineers.',
+    priceDisplay: 'From R3,500',
+    fromPrice: 3500,
+    icon: <Zap className="w-6 h-6" />,
+    color: 'bg-brand-600',
+    questions: [
+      { id: 'workflow', label: 'Primary Workflow to Automate', type: 'textarea', required: true }
     ]
   },
   {
-    id: '7',
-    category: 'training',
-    title: 'Online Training & Upskilling',
-    shortDescription: 'Team digital soft skills & workflow training.',
-    longDescription: 'Human capital development tailored for the digital-first economy. Training that actually sticks.',
-    tools: ['Zoom', 'Miro', 'Typeform', 'LMS'],
-    startingPrice: 'R800',
-    icon: <GraduationCap className="w-6 h-6" />,
-    color: 'bg-cyan-600',
-    packages: [
-      { name: 'Skill Module', description: 'Single software or soft-skill proficiency training', price: 'R800' },
-      { name: 'Team Upskill', description: 'Full workflow and efficiency workshops', price: 'R2,000' },
-      { name: 'Corporate Master', description: 'Ongoing transformation coaching for leads', price: 'R3,500' }
+    id: 'stage-11',
+    stageNumber: 11,
+    title: 'Compliance Maintenance',
+    shortDescription: 'Ongoing legal and statutory upkeep.',
+    longDescription: 'Recurring maintenance protocols to keep your business active and legal.',
+    priceDisplay: 'From R150/task',
+    fromPrice: 150,
+    icon: <Settings className="w-6 h-6" />,
+    color: 'bg-brand-500',
+    questions: [
+      { id: 'maintenance_freq', label: 'Maintenance Frequency', type: 'select', options: ['Monthly', 'Quarterly', 'Annually'], required: true }
+    ]
+  },
+  {
+    id: 'stage-12',
+    stageNumber: 12,
+    title: 'Remote Admin / Human Agents',
+    shortDescription: 'High-touch virtual business support.',
+    longDescription: 'On-demand administrative tasks handled by verified human agents.',
+    priceDisplay: 'From R115/hr',
+    fromPrice: 115,
+    icon: <Headset className="w-6 h-6" />,
+    color: 'bg-brand-600',
+    questions: [
+      { id: 'task_scope', label: 'Task Description', type: 'textarea', required: true },
+      { id: 'hours', label: 'Estimated Hours Needed', type: 'text', required: true }
     ]
   }
 ];
 
-export const STANDALONE_SERVICES: StandaloneService[] = [
+export const SERVICES_DATA: ServiceItem[] = [
   {
-    id: 's1',
-    title: 'SEO Performance Deep-Dive',
-    price: 'R850',
-    description: 'Full technical SEO audit with actionable fixes for speed and ranking.',
-    deliveryTime: '48 Hours',
-    icon: <Search className="w-5 h-5" />
+    id: '1',
+    title: 'Business Admin',
+    shortDescription: 'Stages 1, 3, 5, 11, 12',
+    longDescription: 'Our business administration pillar handles everything from CIPC registrations to complex statutory compliance and remote virtual assistance.',
+    icon: <Briefcase />,
+    color: 'bg-brand-500',
+    tools: ['CIPC', 'SARS', 'COIDA'],
+    startingPrice: 'R495',
+    packages: [
+      { name: 'Core Setup', price: 'R495', description: 'CIPC Registration (Stage 1)' },
+      { name: 'Growth Kit', price: 'R1,250', description: 'Registration + Profile + Compliance' },
+      { name: 'Managed Admin', price: 'R3,500/mo', description: 'Full outsourced support' }
+    ]
   },
   {
-    id: 's2',
-    title: 'Site Speed Optimization',
-    price: 'R1,200',
-    description: 'Manual optimization of images, scripts, and server response times.',
-    deliveryTime: '24 Hours',
-    icon: <Zap className="w-5 h-5" />
+    id: '2',
+    title: 'Cloud & Tech',
+    shortDescription: 'Stages 6, 10',
+    longDescription: 'Automate your pipelines with CRM integrations and cloud-native business tools.',
+    icon: <Cloud />,
+    color: 'bg-brand-600',
+    tools: ['HubSpot', 'Zapier', 'AWS'],
+    startingPrice: 'R1,450',
+    packages: [
+      { name: 'Digital Presence', price: 'R1,450', description: 'Website (Stage 6)' },
+      { name: 'Automation Core', price: 'R3,500', description: 'CRM Setup (Stage 10)' }
+    ]
   },
   {
-    id: 's3',
-    title: 'Security Hardening Pack',
-    price: 'R950',
-    description: 'Implementation of advanced firewalls, SSL, and malware protection.',
-    deliveryTime: '12 Hours',
-    icon: <ShieldCheck className="w-5 h-5" />
-  },
-  {
-    id: 's4',
-    title: 'Copywriting Refresh',
-    price: 'R750',
-    description: '3 pages of conversion-optimized copy written by specialized editors.',
-    deliveryTime: '72 Hours',
-    icon: <FileText className="w-5 h-5" />
-  },
-  {
-    id: 's5',
-    title: 'Social Media Kit',
-    price: 'R600',
-    description: '10 custom-branded social templates ready for Instagram & LinkedIn.',
-    deliveryTime: '24 Hours',
-    icon: <Palette className="w-5 h-5" />
-  },
-  {
-    id: 's6',
-    title: 'Landing Page Repair',
-    price: 'R1,500',
-    description: 'Redesign of your existing landing page for better conversion metrics.',
-    deliveryTime: '48 Hours',
-    icon: <MousePointer2 className="w-5 h-5" />
+    id: '3',
+    title: 'Customer Service & Client Relations',
+    shortDescription: 'Call center services (inbound & outbound), CX strategy.',
+    longDescription: 'Omnichannel customer support, telemarketing, and client relations management powered by professional agents and digital routing.',
+    icon: <Headset />,
+    color: 'bg-slate-950',
+    tools: ['AWS Connect', 'Zendesk', 'VOIP', 'Omnichannel'],
+    startingPrice: 'R115/hr',
+    packages: [
+      { name: 'On-Demand Agents', price: 'R115/hr', description: 'Flexible human support desk.' },
+      { name: 'Full-Time Desk', price: 'R18,500/mo', description: 'Dedicated support specialist.' },
+      { name: 'Architecture', price: 'Custom', description: 'Call center infrastructure setup.' }
+    ]
   }
 ];
 
 export const PROJECTS: Project[] = [
   {
     id: 'p1',
-    serviceId: '4',
-    title: 'Global Store Automation',
-    client: 'Urban Bloom Boutique',
-    description: 'Rebuilding a cross-border e-commerce engine with real-time inventory sync.',
-    fullChallenge: 'The client struggled with manual inventory updates across three different regions, leading to over-selling and customer dissatisfaction.',
-    fullSolution: 'We implemented a unified Shopify backend integrated with custom ERP middleware and automated currency conversion nodes.',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800',
-    templateImage: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
-    marketingImage: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=800',
-    tag: 'E-Commerce',
-    stats: [
-      { label: 'Sales Increase', value: '+140%' },
-      { label: 'Inventory Error', value: '-98%' },
-      { label: 'Regions', value: '3' }
-    ]
-  },
-  {
-    id: 'p2',
-    serviceId: '3',
-    title: 'Identity Refresh 2025',
-    client: 'Starlight Foundations',
-    description: 'A complete branding overhaul for a leading social impact organization.',
-    fullChallenge: 'Starlight needed a modern, digital-first identity that appealed to younger donors without losing its corporate credibility.',
-    fullSolution: 'Developed a high-fidelity design system, custom typography, and a rapid-deployment React-based landing page.',
-    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800',
-    templateImage: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800',
-    marketingImage: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800',
-    tag: 'Branding',
-    stats: [
-      { label: 'Engagement', value: '+65%' },
-      { label: 'Brand Reach', value: '2M+' },
-      { label: 'Consistency', value: '100%' }
-    ]
-  },
-  {
-    id: 'p3',
-    serviceId: '2',
-    title: 'Infrastructure Scaling',
-    client: 'Apex Logistics',
-    description: 'Moving 500TB of operational data to a hybrid-cloud environment.',
-    fullChallenge: 'On-premise servers were failing under the load of holiday peak season logistics tracking.',
-    fullSolution: 'Migration to AWS with serverless Lambda triggers for real-time fleet telemetry processing.',
-    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800',
-    templateImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
-    marketingImage: 'https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&q=80&w=800',
-    tag: 'Cloud',
-    stats: [
-      { label: 'Uptime', value: '99.99%' },
-      { label: 'Latency', value: '-450ms' },
-      { label: 'Security', value: 'Lvl 4' }
-    ]
-  },
-  {
-    id: 'p4',
+    title: 'Nexus Logistics Hub',
+    client: 'Nexus Global',
+    description: 'A 100% automated administrative backend for a cross-border logistics provider.',
+    tag: 'Infrastructure',
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000',
     serviceId: '1',
-    title: 'Document Management System Overhaul',
-    client: 'Nexus Logistics',
-    description: 'Digitalization of 15 years of physical archives with AI-powered indexing.',
-    fullChallenge: 'Nexus Logistics struggled with a massive physical document backlog, hindering searchability and operational speed.',
-    fullSolution: 'We deployed a high-speed OCR pipeline and a custom-indexed Notion environment for immediate data retrieval.',
-    image: 'https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&q=80&w=1200',
-    templateImage: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=600',
-    marketingImage: 'https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=600',
-    tag: 'Business Admin',
+    fullChallenge: 'Nexus was struggling with manual invoice tracking across 4 countries.',
+    fullSolution: 'We implemented an OCR-driven automation layer that reduced manual entry by 85%.',
+    templateImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2426',
+    marketingImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070',
     stats: [
-      { label: 'Time Saved', value: '30h/mo' },
+      { label: 'Time Saved', value: '40h/wk' },
       { label: 'Accuracy', value: '99.8%' },
-      { label: 'Efficiency', value: '+25%' }
+      { label: 'ROI', value: '310%' }
     ]
   }
 ];
 
-export const FAQS: FAQItem[] = [
+export const STANDALONE_SERVICES = [
   {
-    question: "What is the Marvetti Corp framework?",
-    answer: "The Marvetti Framework is a set of proprietary digital-first operational procedures designed to eliminate inefficiency in business workflows through automation and specialized remote support."
+    id: 'ss1',
+    title: 'Rapid Logo Kit',
+    description: 'High-fidelity AI concepting with human polish.',
+    price: 'R350',
+    deliveryTime: '24 Hours',
+    icon: <Palette className="w-6 h-6" />
   },
   {
-    question: "How does the pricing work?",
-    answer: "We offer transparent, once-off setup fees for most modules, with optional monthly retainers for ongoing optimization and high-touch support."
+    id: 'ss2',
+    title: 'Ad Pixel Audit',
+    description: 'Deep scan of Meta/Google tracking health.',
+    price: 'R450',
+    deliveryTime: '48 Hours',
+    icon: <Target className="w-6 h-6" />
+  }
+];
+
+export const FAQS = [
+  {
+    question: "What is the 70/30 Hybrid Model?",
+    answer: "We utilize advanced AI (70%) to handle rapid drafting, generation, and data crunching, while our expert human strategists (30%) provide final quality control, compliance verification, and high-touch consulting."
   }
 ];
 
 export const FAQ_CATEGORIES = [
   {
-    title: 'General Inquiries',
-    items: FAQS
-  },
-  {
-    title: 'Technical Support',
+    title: 'Operations',
     items: [
-      {
-        question: "Is my data secure?",
-        answer: "Yes. All projects are built with security-first architecture and are fully compliant with South African POPIA and global GDPR regulations."
-      }
+      { question: 'Is Marvetti Corporation registered in South Africa?', answer: 'Yes, we are a fully registered South African entity.' }
     ]
   }
 ];
@@ -304,73 +309,10 @@ export const FAQ_CATEGORIES = [
 export const TESTIMONIALS = [
   {
     id: 1,
-    quote: "Marvetti Corp didn't just build us a website; they built us a digital identity that actually generates revenue.",
-    client: "Sarah Jenkins",
-    industry: "Tech Solutions",
-    color: "border-indigo-500",
-    brandColor: "#4f46e5"
-  },
-  {
-    id: 2,
-    quote: "The automation workflows provided by the cloud team have saved us over 40 hours of manual data entry every single month.",
-    client: "David Miller",
-    industry: "Logistics Hub",
-    color: "border-emerald-500",
-    brandColor: "#10b981"
-  }
-];
-
-export const MOCK_DASHBOARD_PROJECTS: DashboardProject[] = [
-  {
-    id: 'dp1',
-    title: 'Cloud Migration Phase 2',
-    status: 'In Progress',
-    progress: 65,
-    lastUpdate: '2 hours ago',
-    manager: 'Ava Robot',
-    pillar: 'Cloud'
-  },
-  {
-    id: 'dp2',
-    title: 'E-Commerce Backend Audit',
-    status: 'Optimization',
-    progress: 85,
-    lastUpdate: '1 day ago',
-    manager: 'Ella Robot',
-    pillar: 'E-Commerce'
-  }
-];
-
-export const MOCK_DASHBOARD_INVOICES: DashboardInvoice[] = [
-  {
-    id: 'INV-2025-001',
-    date: 'Jan 15, 2025',
-    amount: 'R8,500.00',
-    status: 'Paid'
-  },
-  {
-    id: 'INV-2025-002',
-    date: 'Feb 01, 2025',
-    amount: 'R3,200.00',
-    status: 'Pending'
-  }
-];
-
-export const MOCK_LEADS: LeadRecord[] = [
-  {
-    id: 'l1',
-    name: 'Robert Smith',
-    email: 'robert@apex.com',
-    service: 'Cloud Automation',
-    status: 'New',
-    timestamp: '2025-02-10T10:00:00Z'
-  },
-  {
-    id: 'l2',
-    name: 'Alice Wong',
-    email: 'alice@starlight.org',
-    service: 'Branding',
-    status: 'Contacted',
-    timestamp: '2025-02-11T14:30:00Z'
+    quote: "Marvetti Corporation transformed our startup from an idea to a fully registered, automated entity in record time.",
+    client: "Sarah J.",
+    industry: "Fintech",
+    color: "border-brand-500",
+    brandColor: "#EC1B23"
   }
 ];

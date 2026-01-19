@@ -4,8 +4,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Marvetti Corp | Digital & Business Solutions</title>
+    <title>Marvetti Corporation | Digital & Business Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#fff1f1',
+                100: '#ffdfdf',
+                200: '#ffc5c5',
+                300: '#ff9d9d',
+                400: '#ff6464',
+                500: '#EC1B23',
+                600: '#d41118',
+                700: '#b20c12',
+                800: '#930d12',
+                900: '#7a1216',
+                950: '#430406',
+              }
+            },
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+              exo: ['Exo 2', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
       body {
@@ -17,10 +44,24 @@
       .font-inter {
         font-family: 'Inter', sans-serif !important;
       }
-      /* Global override to ensure no italics persist from any defaults */
       * {
         font-style: normal !important;
       }
+      /* Global Uniform Red Overrides */
+      .bg-indigo-600, .bg-blue-600 { background-color: #EC1B23 !important; }
+      .text-indigo-600, .text-blue-600 { color: #EC1B23 !important; }
+      .border-indigo-600, .border-blue-600 { border-color: #EC1B23 !important; }
+      .bg-indigo-500, .bg-blue-500 { background-color: #EC1B23 !important; }
+      .text-indigo-500, .text-blue-500 { color: #EC1B23 !important; }
+      .text-indigo-400, .text-blue-400 { color: #ff6464 !important; }
+      .border-indigo-500, .border-blue-500 { border-color: #EC1B23 !important; }
+      
+      /* Uniform Gradient Implementation */
+      .bg-brand-gradient {
+        background: linear-gradient(135deg, #EC1B23 0%, #d41118 50%, #b20c12 100%);
+      }
+      
+      .selection\:bg-indigo-500 ::selection { background-color: #EC1B23 !important; color: white !important; }
     </style>
   <script type="importmap">
 {

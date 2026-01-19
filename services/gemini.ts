@@ -40,7 +40,7 @@ export const getServiceRecommendation = async (userInput: string) => {
     return `Vertical: ${s.title} (Starting at ${s.startingPrice}). Description: ${s.shortDescription}. Tiers: ${packages}.`;
   }).join("\n");
 
-  const prompt = `System: You are the Marvetti Corp Solution Architect. 
+  const prompt = `System: You are the Marvettiu Corporation Solution Architect. 
     Analyze the user's business challenge and provide a specific recommendation by scanning our current service catalog.
     
     Service Catalog & Real-Time Pricing Data:

@@ -54,16 +54,14 @@ const Logo: React.FC<LogoProps> = ({ className = "", size = 50, loading = false 
         </defs>
         
         <g clipPath="url(#m-logo-silhouette)">
-          {/* Exact color split from the uploaded image */}
+          {/* Using brand color #EC1B23 */}
           <rect width="100" height="100" fill="#0A0B2D" />
-          <path d="M -10,-10 L 110,-10 L 110,110 Z" fill="#ED1C24" />
+          <path d="M -10,-10 L 110,-10 L 110,110 Z" fill="#EC1B23" />
           
-          {/* Shimmer Overlay applied only during loading */}
-          {loading && (
+          {{loading && (
             <rect width="100" height="100" fill="url(#shimmer)" />
-          )}
+          )}}
           
-          {/* Original separator line */}
           <line x1="0" y1="0" x2="100" y2="100" stroke="black" strokeWidth="0.5" opacity="0.1" />
         </g>
       </svg>
