@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { ServiceItem } from '../types';
-import { Check, ArrowRight, MessageCircle, ArrowLeft, Clock, Sparkles, Zap } from 'lucide-react';
+import { Check, ArrowRight, MessageCircle, ArrowLeft, Clock, Sparkles, Zap, TrendingUp, ShieldCheck, Target } from 'lucide-react';
 import { STANDALONE_SERVICES, PROJECTS } from '../constants';
 import ServicePortfolio from './ServicePortfolio';
 import ProjectCarousel from './ProjectCarousel';
@@ -19,6 +19,9 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack, onOrder }) =
 
   const upsells = [...STANDALONE_SERVICES].sort(() => 0.5 - Math.random()).slice(0, 3);
   const serviceProject = PROJECTS.find(p => p.serviceId === service.id);
+  
+  // Specifically for Business Admin (ID: 1)
+  const businessAdminCaseStudy = PROJECTS.find(p => p.id === 'p4');
 
   return (
     <div className="animate-in fade-in duration-500 pb-32">
@@ -47,6 +50,58 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack, onOrder }) =
         </div>
       </section>
 
+      {/* Impact Stats for Business Admin Pillar */}
+      {service.id === '1' && businessAdminCaseStudy && (
+        <section className="bg-slate-900 border-y border-white/5 py-24 overflow-hidden relative">
+          <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+            <div className="absolute top-10 left-10 text-8xl font-black text-white uppercase tracking-tighter rotate-12">IMPACT</div>
+            <div className="absolute bottom-10 right-10 text-8xl font-black text-white uppercase tracking-tighter -rotate-12">DATA</div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto px-4 relative z-10">
+            <div className="flex flex-col md:flex-row gap-16 items-center">
+              <div className="md:w-1/2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-[9px] font-black uppercase tracking-widest mb-6 border border-indigo-500/20">
+                  <TrendingUp className="w-3 h-3" /> Measured Efficiency
+                </div>
+                <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">
+                  Operational <span className="text-indigo-500">Impact</span> Statistics
+                </h2>
+                <p className="text-slate-400 font-medium leading-relaxed mb-8">
+                  Quantifiable results from our <span className="text-white italic">{businessAdminCaseStudy.title}</span> implementation for Nexus Logistics.
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                  {businessAdminCaseStudy.stats.map((stat, idx) => (
+                    <div key={idx} className="p-6 rounded-3xl bg-white/5 border border-white/10 group hover:border-indigo-500/50 transition-all shadow-xl">
+                      <div className="text-3xl font-black text-white tracking-tighter mb-2 group-hover:text-indigo-400 transition-colors">{stat.value}</div>
+                      <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="md:w-1/2 grid grid-cols-2 gap-4">
+                <div className="p-8 rounded-[3rem] bg-indigo-600 text-white flex flex-col justify-between aspect-square group">
+                   <Target className="w-8 h-8 group-hover:scale-110 transition-transform" />
+                   <div>
+                      <div className="text-2xl font-black uppercase tracking-tighter mb-1">Scale Ready</div>
+                      <p className="text-[10px] font-medium opacity-80 uppercase tracking-widest">Automation Built-in</p>
+                   </div>
+                </div>
+                <div className="p-8 rounded-[3rem] bg-white/5 border border-white/10 text-white flex flex-col justify-between aspect-square">
+                   <ShieldCheck className="w-8 h-8 text-indigo-500" />
+                   <div>
+                      <div className="text-2xl font-black uppercase tracking-tighter mb-1">99.8%</div>
+                      <p className="text-[10px] font-medium text-slate-500 uppercase tracking-widest">OCR Accuracy Index</p>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Service Content */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4">
@@ -55,7 +110,7 @@ const ServicePage: React.FC<ServicePageProps> = ({ service, onBack, onOrder }) =
               <div>
                 <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.4em] mb-8">Service Overview</h2>
                 <div className="prose prose-slate prose-xl font-medium text-slate-600 max-w-none leading-relaxed">
-                  Establishing a cohesive digital identity that resonates with your target audience across all touchpoints. Our Marvetti Framework ensures that every solution is optimized for the digital-first economy.
+                  {service.longDescription} Our Marvetti Framework ensures that every solution is optimized for the digital-first economy through rigorous procedural design and remote-first scaling.
                 </div>
               </div>
 
